@@ -14,7 +14,8 @@
 """
 
 import os
-import sys, getopt
+import sys
+import getopt
 import urllib
 from bs4 import BeautifulSoup
 import selenium
@@ -25,25 +26,26 @@ class webScraping:
 
     def __init__(self,
                  class_of_table: str,
+                 csv_export_path: str,
+                 folder_name: str,
                  url_domain: str,
-                 url_path: str,
-                 csv_export_path: str) -> None:
+                 url_path: str) -> None:
 
         self.class_of_table = class_of_table
         self.csv_export_path = csv_export_path
-        self.url_path = url_path
+        self.folder_name = folder_name
         self.url_domain = url_domain
+        self.url_path = url_path
 
         self.url = f'{url_domain}/{url_path}'
 
         self.offset_value = 0
         self.old_offset_value = 0
-        
+
         self.frames = []
         self.extracted_table = []
 
         pass
-
 
     def getTableData(self) -> pd.DataFrame:
         """Gets table data from the web. Return the extracted table as `pandas` `dataframe`.
@@ -89,11 +91,10 @@ class webScraping:
         except:
             return None
 
-
-    def combineDataFrame(self):
+    def combineAndExportDataFrame(self):
         concat_frames = pd.concat(self.frames)
 
-        csvname = f'{self.url_path}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
+        csvname = f'{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
         concat_frames.to_csv(self.csv_export_path+'/'+csvname)
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
@@ -102,9 +103,8 @@ class webScraping:
 
         self.old_offset_value = self.offset_value
         self.frames = []
-        
-        return 
 
+        return
 
     def getAllTables(self):
 
@@ -115,21 +115,22 @@ class webScraping:
         while df is not None:
             offset = f'?offset={self.offset_value}'
             self.url += offset
-            df = self.getTableData()            
+            df = self.getTableData()
             self.extracted_table.append(df)
             self.frames.append(df)
 
             print("self.offset_value =", self.offset_value)
 
             if df is None:
-                self.combineDataFrame()
+                self.combineAndExportDataFrame()
                 print()
-                print(f'end offset={self.offset_value}, end self.extracted_table[-1].shape={self.extracted_table[-1].shape}')
+                print(
+                    f'end offset={self.offset_value}, end self.extracted_table[-1].shape={self.extracted_table[-1].shape}')
                 return
 
             if (self.offset_value % (10000) == 0) and (self.offset_value > 0):
-            # if (self.offset_value % 50) == 0:
-                self.combineDataFrame()
+                # if (self.offset_value % 50) == 0:
+                self.combineAndExportDataFrame()
 
             self.offset_value += 50
 
@@ -144,7 +145,7 @@ def folderExist(path: str) -> bool:
 
 
 def folderCreate(path: str,
-                  foldername: str = ''):
+                 foldername: str = ''):
     """
     https://www.geeksforgeeks.org/create-a-directory-in-python/
     """
@@ -163,7 +164,7 @@ def getCmlArg(argv) -> str:
     """Get the arguments from command line. Return `str` 'tv' / 'curated/trending-picks' or 'movies' . 'curated/trending-movies'
     """
     # print("argv =", argv)
-    
+
     if not argv:
         print('> Please enter arg, `test.py -h OR -t OR -m <trend> (optional)`')
         sys.exit(2)
@@ -189,13 +190,13 @@ def getCmlArg(argv) -> str:
     elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
         try:
             if args[0] in ["trend", "trending"]:
-                return 'curated/trending-picks', 'tv trending'
+                return 'curated/trending-picks', 'trending-tv'
         except:
             return 'tv', 'tv'
     elif opt in ("-m", "-movie", "-movies"):
         try:
             if args[0] in ["trend", "trending"]:
-                return 'curated/trending-movies', 'movies trending'
+                return 'curated/trending-movies', 'trending-movies'
         except:
             return 'movies', 'movies'
     # print('url path is "', url_path)
@@ -220,8 +221,11 @@ def main():
     # Get TV show or Movie data
     csv_export_path = folderCreate(path, folder_name)
 
-    scrapper = webScraping(class_of_table, url_domain,
-                             url_path, csv_export_path)
+    scrapper = webScraping(class_of_table,
+                           csv_export_path=csv_export_path,
+                           folder_name=folder_name,
+                           url_domain=url_domain,
+                           url_path=url_path)
     scrapper.getAllTables()
     print(len(scrapper.extracted_table))
     # print("df=",df)

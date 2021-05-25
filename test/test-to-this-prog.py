@@ -32,13 +32,13 @@ def getCmlArg(argv) -> str:
     elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
         try:
             if args[0] in ["trend", "trending"]:
-                return 'curated/trending-picks', 'tv trending'
+                return 'curated/trending-picks', 'trending-tv'
         except:
             return 'tv', 'tv'
     elif opt in ("-m", "-movie", "-movies"):
         try:
             if args[0] in ["trend", "trending"]:
-                return 'curated/trending-movies', 'movies trending'
+                return 'curated/trending-movies', 'trending-movies'
         except:
             return 'movies', 'movies'
     # print('url path is "', url_path)
