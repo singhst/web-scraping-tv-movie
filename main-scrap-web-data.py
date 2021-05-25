@@ -90,6 +90,22 @@ class webScraping:
             return None
 
 
+    def combineDataFrame(self):
+        concat_frames = pd.concat(self.frames)
+
+        csvname = f'{self.url_path}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
+        concat_frames.to_csv(self.csv_export_path+'/'+csvname)
+
+        # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
+        print("concat_frames.shape =", concat_frames.shape)
+        print("> export: ", self.csv_export_path+'\\'+csvname)
+
+        self.old_offset_value = self.offset_value
+        self.frames = []
+        
+        return 
+
+
     def getAllTables(self):
 
         df = pd.DataFrame()
@@ -99,30 +115,24 @@ class webScraping:
         while df is not None:
             offset = f'?offset={self.offset_value}'
             self.url += offset
-            df = self.getTableData()
+            df = self.getTableData()            
             self.extracted_table.append(df)
             self.frames.append(df)
 
             print("self.offset_value =", self.offset_value)
 
-            if (self.offset_value % 5000 == 0) and (self.offset_value > 0):
+            if df is None:
+                self.combineDataFrame()
+                print()
+                print(f'end offset={self.offset_value}, end self.extracted_table[-1].shape={self.extracted_table[-1].shape}')
+                return
+
+            if (self.offset_value % (10000) == 0) and (self.offset_value > 0):
             # if (self.offset_value % 50) == 0:
-                concat_frames = pd.concat(self.frames)
-
-                csvname = f'{self.url_path}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
-                concat_frames.to_csv(self.csv_export_path+'/'+csvname)
-
-                # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
-                print("concat_frames.shape =", concat_frames.shape)
-                print("> export: ", self.csv_export_path+'\\'+csvname)
-
-                self.old_offset_value = self.offset_value
-                self.frames = []
+                self.combineDataFrame()
 
             self.offset_value += 50
 
-        print()
-        print(f'end offset={self.offset_value}, end df.shape={df.shape}')
         return
 
 
@@ -150,45 +160,54 @@ def folderCreate(path: str,
 
 
 def getCmlArg(argv) -> str:
-    """Get the arguments from command line. Return `str` 'tv' or 'movies'
+    """Get the arguments from command line. Return `str` 'tv' / 'curated/trending-picks' or 'movies' . 'curated/trending-movies'
     """
     # print("argv =", argv)
-
-    url_path = ''
     
     if not argv:
-        print('> Please enter arg, `main.py -h OR -t OR -m`')
+        print('> Please enter arg, `test.py -h OR -t OR -m <trend> (optional)`')
         sys.exit(2)
 
     try:
         argumentList = argv
-        shortopts = "htvm"     
+        shortopts = "htm"
         long_options = ["tv", "movie"]
         opts, args = getopt.getopt(argumentList, shortopts, long_options)
 
     except getopt.GetoptError:
-        print('> Wrong arg, `test.py -h OR -t OR -m`')
+        print('> Wrong arg, `test.py -h OR -t OR -m <trend> (optional)`')
         sys.exit(2)
 
     # print("opts =", opts)
+    # print("args =", args)
 
-    for opt, arg in opts:
-        if opt == '-h':
-            print('> in `-h`, `test.py -t OR -m`')
-            sys.exit()
-        elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
-            url_path = 'tv'
-        elif opt in ("-m", "-movie", "-movies"):
-            url_path = 'movies'
+    # for opt, arg in opts:
+    opt = opts[0][0]
+    if opt == '-h':
+        print('> in `-h`, `test.py -h OR -t OR -m <trend> (optional)`')
+        sys.exit()
+    elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
+        try:
+            if args[0] in ["trend", "trending"]:
+                return 'curated/trending-picks', 'tv trending'
+        except:
+            return 'tv', 'tv'
+    elif opt in ("-m", "-movie", "-movies"):
+        try:
+            if args[0] in ["trend", "trending"]:
+                return 'curated/trending-movies', 'movies trending'
+        except:
+            return 'movies', 'movies'
     # print('url path is "', url_path)
 
-    return url_path
+    print('> wrong argument, `test.py -h OR -t OR -m <trend> (optional)`')
+    sys.exit()
 
 
 def main():
 
     # Get argument from command line
-    url_path = getCmlArg(sys.argv[1:])
+    url_path, folder_name = getCmlArg(sys.argv[1:])
     print("url_path =", url_path)
 
     # init needed variables
@@ -199,7 +218,7 @@ def main():
     url_domain = 'https://reelgood.com'
 
     # Get TV show or Movie data
-    csv_export_path = folderCreate(path, url_path)
+    csv_export_path = folderCreate(path, folder_name)
 
     scrapper = webScraping(class_of_table, url_domain,
                              url_path, csv_export_path)
