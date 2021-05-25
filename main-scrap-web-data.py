@@ -21,7 +21,7 @@ import selenium
 import pandas as pd
 
 
-class webScraping():
+class webScraping:
 
     def __init__(self,
                  class_of_table: str,
@@ -44,7 +44,7 @@ class webScraping():
         pass
 
 
-    def get_table_data(self) -> pd.DataFrame:
+    def getTableData(self) -> pd.DataFrame:
         """Gets table data from the web. Return the extracted table as `pandas` `dataframe`.
 
         Parameters
@@ -89,7 +89,7 @@ class webScraping():
             return None
 
 
-    def get_all_tables(self) -> pd.DataFrame:
+    def getAllTables(self) -> pd.DataFrame:
 
         df = pd.DataFrame()
 
@@ -98,7 +98,7 @@ class webScraping():
         while df is not None:
             offset = f'?offset={self.offset_value}'
             self.url += offset
-            df = self.get_table_data()
+            df = self.getTableData()
             self.return_df.append(df)
             self.frames.append(df)
 
@@ -122,21 +122,21 @@ class webScraping():
         return
 
 
-def folder_exist(path: str) -> bool:
+def folderExist(path: str) -> bool:
     """Check the folder exists or not
     """
     # print('os.path.exists(path)=',os.path.exists(path))
     return os.path.exists(path)
 
 
-def folder_create(path: str,
+def folderCreate(path: str,
                   foldername: str = ''):
     """
     https://www.geeksforgeeks.org/create-a-directory-in-python/
     """
     path = os.path.join(path, foldername)
 
-    if not folder_exist(path):
+    if not folderExist(path):
         os.makedirs(path)
         print(f"> creates {path}")
     else:
@@ -145,45 +145,63 @@ def folder_create(path: str,
     return path
 
 
-def get_cml_arg(argv) -> str:
-    try:
-        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
-    except getopt.GetoptError:
-        print('test.py -i <inputfile> -o <outputfile>')
+def getCmlArg(argv) -> str:
+    """Get the arguments from command line. Return `str` 'tv' or 'movies'
+    """
+    # print("argv =", argv)
+
+    url_path = ''
+    
+    if not argv:
+        print('> Please enter arg, `main.py -h OR -t OR -m`')
         sys.exit(2)
+
+    try:
+        argumentList = argv
+        shortopts = "htvm"     
+        long_options = ["tv", "movie"]
+        opts, args = getopt.getopt(argumentList, shortopts, long_options)
+
+    except getopt.GetoptError:
+        print('> Wrong arg, `test.py -h OR -t OR -m`')
+        sys.exit(2)
+
+    # print("opts =", opts)
+
     for opt, arg in opts:
         if opt == '-h':
-            print('test.py -i <inputfile> -o <outputfile>')
+            print('> in `-h`, `test.py -t OR -m`')
             sys.exit()
-        elif opt in ("-i", "--ifile"):
-            inputfile = arg
-        elif opt in ("-o", "--ofile"):
-            outputfile = arg
+        elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
+            url_path = 'tv'
+        elif opt in ("-m", "-movie", "-movies"):
+            url_path = 'movies'
+    # print('url path is "', url_path)
+
+    return url_path
+
 
 def main():
+
+    # Get argument from command line
+    url_path = getCmlArg(sys.argv[1:])
+    print("url_path =", url_path)
+
+    # init needed variables
     current_path = os.getcwd()
     path = os.path.join(current_path, 'reelgood-database')
 
     class_of_table = 'css-1179hly'
     url_domain = 'https://reelgood.com'
 
-    # Get TV show data
-    url_path = 'tv'
-    csv_export_path = folder_create(path, url_path)
+    # Get TV show or Movie data
+    csv_export_path = folderCreate(path, url_path)
 
     tvScrapper = webScraping(class_of_table, url_domain,
                              url_path, csv_export_path)
-    df = tvScrapper.get_all_tables()
+    df = tvScrapper.getAllTables()
     # print("df=",df)
     # print("df.shape=",df.shape)
-
-    # Get movie data
-    url_path = 'movie'
-    csv_export_path = folder_create(path, url_path)
-
-    movieScrapper = webScraping(class_of_table, url_domain, 
-                                url_path, csv_export_path)
-    df = movieScrapper.get_all_tables()
 
 
 if __name__ == "__main__":

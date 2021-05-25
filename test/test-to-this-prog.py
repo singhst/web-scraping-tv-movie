@@ -2,7 +2,9 @@
 
 import sys, getopt
 
-def getCmlArg(argv):
+def getCmlArg(argv) -> str:
+    """Get the arguments from command line.
+    """
     # print("argv =", argv)
 
     url_path = ''
@@ -39,6 +41,7 @@ def getCmlArg(argv):
 def main():
     url_path = getCmlArg(sys.argv[1:])
     print("url_path =", url_path)
+
 
 if __name__ == "__main__":
     main()
