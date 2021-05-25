@@ -12,7 +12,7 @@ import os
 import glob
 import pandas as pd
 
-def combine():
+def combineCsv():
     #set working directory
     dir = os.path.join(os.getcwd(), 'reelgood-database')
     dir = os.path.join(dir, 'movies')
@@ -33,4 +33,4 @@ def combine():
 
 
 if __name__ == "__main__":
-    combine()
+    combineCsv()
