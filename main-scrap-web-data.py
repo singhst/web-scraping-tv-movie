@@ -114,7 +114,7 @@ class webScraping:
 
         print("self.url =", self.url)
 
-        while df is not None:
+        while 1:
             offset = f'?offset={self.offset_value}'
             url_with_path = self.url + offset
             df = self.getTableData(url_with_path)
