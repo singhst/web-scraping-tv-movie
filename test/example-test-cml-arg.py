@@ -1,4 +1,7 @@
 #!/usr/bin/python
+"""
+https://www.tutorialspoint.com/python/python_command_line_arguments.htm
+"""
 
 import sys, getopt
 
@@ -10,7 +13,11 @@ def main(argv):
     
     try:
         argumentList = argv
-        shortopts = "ahi:o:"     # the colon `:` behind an arg (i.e. letter) = this arg has option
+
+        # the colon `:` behind an arg (i.e. letter) = this arg has option
+        # i.e.  behind `-h` don't hv option         ==> `$ test.py -h` shows no errors
+        #       behind `-i or -o` don't hv option   ==> `$ test.py -i` shows errors ==> `$ test.py -i xxxx` shows on errors
+        shortopts = "hi:o:"     
         long_options = ["ifile=","ofile="]
 
         opts, args = getopt.getopt(argumentList, shortopts, long_options)
