@@ -90,7 +90,7 @@ class webScraping:
             return None
 
 
-    def getAllTables(self) -> pd.DataFrame:
+    def getAllTables(self):
 
         df = pd.DataFrame()
 
@@ -103,7 +103,9 @@ class webScraping:
             self.extracted_table.append(df)
             self.frames.append(df)
 
-            if (self.offset_value % 5000) == 0 & self.offset_value > 0:
+            print("self.offset_value =", self.offset_value)
+
+            if (self.offset_value % 5000 == 0) and (self.offset_value > 0):
             # if (self.offset_value % 50) == 0:
                 concat_frames = pd.concat(self.frames)
 
@@ -199,9 +201,10 @@ def main():
     # Get TV show or Movie data
     csv_export_path = folderCreate(path, url_path)
 
-    tvScrapper = webScraping(class_of_table, url_domain,
+    scrapper = webScraping(class_of_table, url_domain,
                              url_path, csv_export_path)
-    df = tvScrapper.getAllTables()
+    scrapper.getAllTables()
+    print(len(scrapper.extracted_table))
     # print("df=",df)
     # print("df.shape=",df.shape)
 
