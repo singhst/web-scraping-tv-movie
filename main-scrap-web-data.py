@@ -47,13 +47,13 @@ class webScraping:
 
         pass
 
-    def getTableData(self) -> pd.DataFrame:
+    def getTableData(self, url) -> pd.DataFrame:
         """Gets table data from the web. Return the extracted table as `pandas` `dataframe`.
 
         Parameters
         ----------
-        self.url : str
-            The self.url of the website
+        url : str
+            The url of the website, e.g. `https://reelgood.com/movies?offset=50`
         class_of_table : str
 
         Returns
@@ -64,11 +64,13 @@ class webScraping:
             Return `None` if no data can be extracted.
         """
 
+        # print("url =", url)
+
         # add User-Agent to header to pretend as browser visit, more detials can be found in FireBug plugin
         # if we don't add the below, error message occurs. ERROR: urllib.error.HTTPError: HTTP Error 403: Forbidden
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
-        req = urllib.request.Request(url=self.url, headers=headers)
+        req = urllib.request.Request(url=url, headers=headers)
 
         try:
             html = urllib.request.urlopen(req).read()
@@ -114,18 +116,20 @@ class webScraping:
 
         while df is not None:
             offset = f'?offset={self.offset_value}'
-            self.url += offset
-            df = self.getTableData()
+            url_with_path = self.url + offset
+            df = self.getTableData(url_with_path)
             self.extracted_table.append(df)
             self.frames.append(df)
 
             print("self.offset_value =", self.offset_value)
+            # print('df.iloc[[0]] =', df.iloc[[0]])
 
             if df is None:
                 self.combineAndExportDataFrame()
                 print()
-                print(
-                    f'end offset={self.offset_value}, end self.extracted_table[-1].shape={self.extracted_table[-1].shape}')
+                print(f'end offset={self.offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
+                print(f'type(self.extracted_table[-1])={type(self.extracted_table[-1])}')
+                print(f'self.extracted_table[-1]={self.extracted_table[-1]}')
                 return
 
             if (self.offset_value % (10000) == 0) and (self.offset_value > 0):
