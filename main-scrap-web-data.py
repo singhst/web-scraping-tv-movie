@@ -36,10 +36,11 @@ class webScraping:
 
         self.url = f'{url_domain}/{url_path}'
 
-        self.frames = []
-        self.return_df = []
         self.offset_value = 0
         self.old_offset_value = 0
+        
+        self.frames = []
+        self.extracted_table = []
 
         pass
 
@@ -99,10 +100,11 @@ class webScraping:
             offset = f'?offset={self.offset_value}'
             self.url += offset
             df = self.getTableData()
-            self.return_df.append(df)
+            self.extracted_table.append(df)
             self.frames.append(df)
 
-            if (self.offset_value % 2500) == 0 & self.offset_value > 0:
+            if (self.offset_value % 5000) == 0 & self.offset_value > 0:
+            # if (self.offset_value % 50) == 0:
                 concat_frames = pd.concat(self.frames)
 
                 csvname = f'{self.url_path}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
