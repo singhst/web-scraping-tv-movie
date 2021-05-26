@@ -12,10 +12,13 @@ import os
 import glob
 import pandas as pd
 
+folder_name = 'tv'
+# folder_name = 'movies'
+
 def combineCsv():
     #set working directory
     dir = os.path.join(os.getcwd(), 'reelgood-database')
-    dir = os.path.join(dir, 'movies')
+    dir = os.path.join(dir, folder_name)
 
     os.chdir(dir)
 
@@ -29,7 +32,7 @@ def combineCsv():
     #combine all files in the list
     combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames ])
     #export to csv
-    combined_csv.to_csv( "combined_csv.csv", index=False, encoding='utf-8-sig')
+    combined_csv.to_csv( f"all-{folder_name}.csv", index=False, encoding='utf-8-sig')
 
 
 if __name__ == "__main__":
