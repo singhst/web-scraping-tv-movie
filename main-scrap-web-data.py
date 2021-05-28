@@ -14,6 +14,7 @@
 
 import os
 import sys
+from datetime import date
 import getopt
 import urllib
 from bs4 import BeautifulSoup
@@ -94,8 +95,9 @@ class webScraping:
 
     def combineAndExportDataFrame(self):
         concat_frames = pd.concat(self.frames)
-
-        csvname = f'{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
+        
+        today = date.today()
+        csvname = f'{today}-{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
         concat_frames.to_csv(self.csv_export_path+'/'+csvname)
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
