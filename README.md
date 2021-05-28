@@ -36,6 +36,10 @@ Sample of the scraped data, the first three TV titles match with the table shown
 
 <img src="img\csv-tv-trend.png" style="zoom:40%;"/>
 
+Web page:
+
+<img src="img\reelgood-data-trend-tv-20210528.png" style="zoom:50%;"/>
+
 ## Note - Program Structure
 
 ```
