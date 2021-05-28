@@ -30,6 +30,10 @@ Extract `trending TV Shows` at 2021.05.28.
 
 Terminal, run the program:
 
+```sh
+$ python main-scrap-web-data.py -t trend
+```
+
 <img src="img\terminal-run-prog-args-tv-trend.png" style="zoom:50%;"/>
 
 Sample of the scraped data, the first three TV titles match with the table shown in web page:
@@ -58,7 +62,7 @@ Web page:
 
 `main-scrap-web-data.py`: Main program to extract table data from web page.
 
-`main-scrap-link.py`: (Developing) Extract different media service providers (e.g. Netflix, Desney+) (example link: https://reelgood.com/show/friends-1994).
+`main-scrap-link.py`: (Developing) Extract different media service providers (e.g. Netflix, Disney+) (example link: https://reelgood.com/show/friends-1994).
 
 `combine-csv.py`: Combine the separated extractde .csv files into one. 
 
