@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Extract TV Shows and Movies in Reelgood.com.
 
-    * get_spreadsheet_cols - returns the column headers of the file
     * main - the main function of the script
 
     https://reelgood.com
