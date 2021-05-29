@@ -4,6 +4,7 @@ A program to scrap TV Shows and Movies from [web page](https://reelgood.com/). S
 
 Data format in the web page: HTML table 
 
+
 ## Usage
 
 Use the following command to scrap data from web.  
@@ -44,6 +45,7 @@ Web page:
 
 <img src="img\reelgood-data-trend-tv-20210528.png" style="zoom:50%;"/>
 
+
 ## Note - Program Structure
 
 ```
@@ -65,6 +67,7 @@ Web page:
 `main-scrap-link.py`: (Developing) Extract different media service providers (e.g. Netflix, Disney+) (example link: https://reelgood.com/show/friends-1994).
 
 `combine-csv.py`: Combine the separated extractde .csv files into one. 
+
 
 ## Note - Routing in the web
 ```
