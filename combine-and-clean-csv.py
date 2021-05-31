@@ -13,10 +13,10 @@ import glob
 from datetime import date
 import pandas as pd
 
-# folder_name = 'tv'
-folder_name = 'movies'
+folder_name = 'tv'
+# folder_name = 'movies'
 
-file_name = folder_name
+movie_or_tv = folder_name
 
 
 def cleanDf(df: pd.DataFrame):
@@ -28,9 +28,11 @@ def cleanDf(df: pd.DataFrame):
     4. `2nd`, `4th` & `10th` columns    ==> Remove, empty columns
     """
 
-    df.columns.values[6] = 'IMDB Score'
+    # df.columns.values[6] = 'IMDB Score'
+    df = df.rename(columns={df.columns[6]: 'IMDB Score'})
     
-    df.columns.values[7] = 'Reelgood Rating Score'
+    # df.columns.values[7] = 'Reelgood Rating Score'
+    df = df.rename(columns={df.columns[7]: 'Reelgood Rating Score'})
     
     df.drop(df.columns[[0,10]], axis=1, inplace=True)
 
@@ -57,8 +59,18 @@ def combineCsv():
     #combine all files in the list
     combined_csv = pd.concat([cleanDf(pd.read_csv(f)) for f in all_filenames])
     #export to csv
+    dir =  os.chdir("..")
+    file_name = f"all-{movie_or_tv}.csv"
+    combined_csv.to_csv(file_name, index=False, encoding='utf-8-sig')
+    #change dir to parent folder `/reelgood-database`
+    dir = os.path.join(dir, folder_name)
+    dir =  os.chdir("..")
     today = date.today()
-    combined_csv.to_csv( f"all-{file_name}.csv", index=False, encoding='utf-8-sig')
+    file_name = f"all-{movie_or_tv}-{today}.csv"
+    combined_csv.to_csv(file_name, index=False, encoding='utf-8-sig')
+
+
+    return combined_csv
 
 
 def test():
@@ -85,5 +97,6 @@ def test():
 if __name__ == "__main__":
     
     # test()
-
-    combineCsv()
+    df = combineCsv()
+    print(df.head())
+    print(df.shape)

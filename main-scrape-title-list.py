@@ -21,6 +21,8 @@ from bs4 import BeautifulSoup
 import selenium
 import pandas as pd
 
+from helper.folderHandler import folderCreate, folderExist
+
 
 class webScrapeTitleList:
 
@@ -140,29 +142,6 @@ class webScrapeTitleList:
             self.offset_value += 50
 
         return
-
-
-def folderExist(path: str) -> bool:
-    """Check the folder exists or not
-    """
-    # print('os.path.exists(path)=',os.path.exists(path))
-    return os.path.exists(path)
-
-
-def folderCreate(path: str,
-                 foldername: str = ''):
-    """
-    https://www.geeksforgeeks.org/create-a-directory-in-python/
-    """
-    path = os.path.join(path, foldername)
-
-    if not folderExist(path):
-        os.makedirs(path)
-        print(f"> creates {path}")
-    else:
-        print(f"> folder existed, {path}")
-
-    return path
 
 
 def getCmlArg(argv) -> str:
