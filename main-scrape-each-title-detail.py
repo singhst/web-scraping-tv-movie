@@ -1,4 +1,5 @@
 from helper.translateToUrlPath import translateToUrlPath
+from helper.listAsCsv import listAsCsv
 
 from typing import Iterable
 import requests
@@ -70,7 +71,7 @@ def writeToFile(content: Iterable[str],
     file1.close()  # to change file access modes
 
 
-def main():
+def test():
     url_domain = 'https://reelgood.com'
     movie_or_show = 'movie'
     title = "The Intouchables"
@@ -82,6 +83,12 @@ def main():
     print(type(content))
     # writeTxt(content)
 
+def main():
+    titles = listAsCsv()
+    titleList = titles.getTitlesList()
+
+    for title in titleList:
+        
 
 if __name__ == "__main__":
     main()

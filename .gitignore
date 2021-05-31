@@ -9,3 +9,4 @@ helper/__pycache__/translateTitleToUrl.cpython-38.pyc
 helper/__pycache__/translateToUrlPath.cpython-38.pyc
 test/extracted_html_text.html
 helper/__pycache__/folderHandler.cpython-38.pyc
+helper/__pycache__/getCmlArg.cpython-38.pyc

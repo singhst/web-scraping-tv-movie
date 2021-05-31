@@ -14,14 +14,6 @@ from datetime import date
 import pandas as pd
 
 
-folder_name = 'tv'
-# folder_name = 'movies'
-
-movie_or_tv = folder_name
-parent_folder = 'reelgood-database'
-backup_folder = '(backup)'
-
-
 def cleanDf(df: pd.DataFrame):
     """
     The following are the instructions of the cleansing process:
@@ -104,6 +96,14 @@ def test():
 if __name__ == "__main__":
     
     # test()
+    
+    # folder_name = 'tv'
+    folder_name = 'movies'
+
+    movie_or_tv = folder_name
+    parent_folder = 'reelgood-database'
+    backup_folder = '(backup)'
+    
     df = combineCsv()
     print(df.head())
     print(df.shape)
