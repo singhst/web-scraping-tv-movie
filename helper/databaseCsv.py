@@ -1,6 +1,6 @@
 import pandas as pd
 
-class listAsCsv():
+class databaseCsv():
 
     def __init__(self,
                  movies_or_tv: str,
@@ -16,22 +16,25 @@ class listAsCsv():
     def importCsv(self):
         self.dataframe = pd.read_csv(self.file_path)
 
-    def getDataFrame(self):
+    def getDataFrame(self) -> pd.DataFrame:
         return self.dataframe
 
-    def getTitlesList(self):
-        return self.dataframe['Title'].tolist()
+    def getColumnByColName(self, col_name: str = 'Title') -> list:
+        """
+        col_name: `str`; 'Title', 'Year', 'Type', 'Rating', 'IMDB Score', 'Reelgood Rating Score', 'Available On'
+        """
+        return self.dataframe[col_name].tolist()
 
 
 if __name__ == "__main__":
     movies_or_tv = "tv"
     # folder_path = "reelgood-database"
 
-    titles = listAsCsv(
+    titles = databaseCsv(
         movies_or_tv,
         # folder_path
     )
     print(titles.getDataFrame())
 
-    print(titles.getTitlesList()[:10])
-    print(len(titles.getTitlesList()))
+    print(titles.getColumnByColName()[:10])
+    print(len(titles.getColumnByColName()))

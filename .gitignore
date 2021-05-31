@@ -10,3 +10,6 @@ helper/__pycache__/translateToUrlPath.cpython-38.pyc
 test/extracted_html_text.html
 helper/__pycache__/folderHandler.cpython-38.pyc
 helper/__pycache__/getCmlArg.cpython-38.pyc
+helper/__pycache__/listAsCsv.cpython-38.pyc
+helper/__pycache__/databaseCsv.cpython-38.pyc
+helper/__pycache__/tempStorage.cpython-38.pyc

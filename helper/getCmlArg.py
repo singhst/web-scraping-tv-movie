@@ -1,24 +1,39 @@
+"""
+https://www.tutorialspoint.com/python/python_command_line_arguments.htm
+"""
+
+from typing import Iterable
 import sys
 import getopt
 
-def getCmlArg() -> str:
-    """Get the arguments from command line. Return `str` 'tv' / 'curated/trending-picks' or 'movies' . 'curated/trending-movies'
+def getCmlArg() -> Iterable[str]:
+    """Get the arguments from command line. 
+    
+    Return `list(str)`,
+
+        `['curated/trending-picks', 'trending-tv']`
+
+        OR `['tv', 'tv']` 
+
+        OR `['curated/trending-movies', 'trending-movies']`
+        
+        OR `['movies', 'movies']`
     """
     argv = sys.argv[1:]
     # print("argv =", argv)
 
     if not argv:
-        print('> Please enter arg, `test.py -t OR -m <trend (optional)>`')
+        print('> Please enter arg, `test.py -h OR -t OR -m <trend (optional)>`')
         sys.exit(2)
 
     try:
         argumentList = argv
         shortopts = "htm"
-        long_options = ["tv", "movie"]
+        long_options = ["tv=", "movie="]
         opts, args = getopt.getopt(argumentList, shortopts, long_options)
 
     except getopt.GetoptError:
-        print('> Wrong arg, `test.py -t OR -m <trend (optional)>`')
+        print('> Wrong arg, `test.py -h OR -t OR -m <trend (optional)>`')
         sys.exit(2)
 
     # print("opts =", opts)
@@ -27,7 +42,7 @@ def getCmlArg() -> str:
     # for opt, arg in opts:
     opt = opts[0][0]
     if opt == '-h':
-        print('> in `-h`, `test.py -t OR -m <trend (optional)>`')
+        print('> in `-h`, `test.py -h OR -t OR -m <trend (optional)>`')
         sys.exit()
     elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
         try:
@@ -43,7 +58,7 @@ def getCmlArg() -> str:
             return 'movies', 'movies'
     # print('url path is "', url_path)
 
-    print('> wrong argument, `test.py -t OR -m <trend (optional)>`')
+    print('> wrong argument, `test.py -h OR -t OR -m <trend (optional)>`')
     sys.exit()
 
 

@@ -1,10 +1,3 @@
-from helper.translateToUrlPath import translateToUrlPath
-from helper.listAsCsv import listAsCsv
-
-from typing import Iterable
-import requests
-from bs4 import BeautifulSoup
-
 """
 routing pattern,
 
@@ -13,8 +6,26 @@ tv shows:   /show
 movie:      /movie
 """
 
+from typing import Iterable
+import requests
+from bs4 import BeautifulSoup
+
+from helper.translateToUrlPath import translateToUrlPath
+from helper.databaseCsv import databaseCsv
+from helper.getCmlArg import getCmlArg
+from helper.tempStorage import tempStorage
+
 
 class webScrapeEachTitleDetail():
+    """
+    url_domain: e.g. `https://xxxx.com`
+    
+    movie_or_show: `str`, only accept `movie` or `show` because of the Reelgood url pattern.
+
+    title: `str`, title of the movie/TV show
+
+    year: `str`, publishing year
+    """
 
     def __init__(self,
                  url_domain: str,
@@ -84,11 +95,28 @@ def test():
     # writeTxt(content)
 
 def main():
-    titles = listAsCsv()
-    titleList = titles.getTitlesList()
+    url_domain = 'https://reelgood.com'
 
-    for title in titleList:
-        
+    # Get argument from command line
+    _url_path, movies_or_tv = getCmlArg()
+    movie_or_show = movies_or_tv.replace('movies', 'movie').replace('tv', 'show')
+    # print("url_path =", url_path)
+    # print("movies_or_tv =", movies_or_tv)
+
+    table = databaseCsv(movies_or_tv)
+    titleList = table.getColumnByColName('Title')
+    yearList = table.getColumnByColName('Year')
+    # print(titleList[:10])
+
+    storage = tempStorage()
+
+    for title, year in zip(titleList, yearList):
+        scraper = webScrapeEachTitleDetail(url_domain, movie_or_show, title, year)
+        description = scraper.getDescription()
+        storage.addItem(movie_or_show, title, year, description)
+    
+    print(len(storage.getStoredItems()))
+
 
 if __name__ == "__main__":
     main()
