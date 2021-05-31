@@ -4,7 +4,7 @@ class listAsCsv():
 
     def __init__(self,
                  movies_or_tv: str,
-                 folder_path: str = "/reelgood-database"
+                 folder_path: str = "reelgood-database"
                  ):
         
         self.movies_or_tv = movies_or_tv
@@ -19,7 +19,10 @@ class listAsCsv():
 
 if __name__ == "__main__":
     movies_or_tv = "tv"
-    folder_path = "reelgood-database"
+    # folder_path = "reelgood-database"
 
-    titleList = listAsCsv(movies_or_tv, folder_path)
+    titleList = listAsCsv(
+        movies_or_tv,
+        # folder_path
+    )
     print(titleList.dataframe)
