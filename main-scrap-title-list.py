@@ -22,7 +22,7 @@ import selenium
 import pandas as pd
 
 
-class webScraping:
+class webScrapeTitleList:
 
     def __init__(self,
                  class_of_table: str,
@@ -226,7 +226,7 @@ def main():
     # Get TV show or Movie data
     csv_export_path = folderCreate(path, folder_name)
 
-    scrapper = webScraping(class_of_table,
+    scrapper = webScrapeTitleList(class_of_table,
                            csv_export_path=csv_export_path,
                            folder_name=folder_name,
                            url_domain=url_domain,
