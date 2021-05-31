@@ -8,6 +8,7 @@ def translateToUrlPath(domain: str,
 
     # print('in translateToUrlPath')
     
+    remove title's symbols ==> keep only letters and numbers
     title = title.lower().replace(' ', '-')
 
     return f"{domain}/{movie_or_show}/{title}-{year}"

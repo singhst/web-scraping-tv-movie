@@ -38,7 +38,7 @@ class webScrapeEachTitleDetail():
         self.url_path_var3 = year           #
 
         self.url = translateToUrlPath(url_domain, movie_or_show, title, year)
-        print(self.url)
+        print("> webScrapeEachTitleDetail, self.url =", self.url)
 
         self.soup = ''
         self.getHtmlPage()
@@ -47,11 +47,11 @@ class webScrapeEachTitleDetail():
         html_text = requests.get(self.url).text
         self.soup = BeautifulSoup(html_text, 'html.parser')
 
-        writeToFile(html_text, "extracted_html_text", "html")
-        writeToFile(self.soup, "extracted_html", "html")
+        # writeToFile(html_text, "extracted_html_text", "html")
+        # writeToFile(self.soup, "extracted_html", "html")
         # print(type(self.soup))
         
-        return
+        return self.soup
 
     def getDescription(self) -> str:
         p = self.soup.find('p', itemprop="description")
@@ -94,6 +94,7 @@ def test():
     print(type(content))
     # writeTxt(content)
 
+
 def main():
     url_domain = 'https://reelgood.com'
 
@@ -109,13 +110,23 @@ def main():
     # print(titleList[:10])
 
     storage = tempStorage()
+    links = ['']
 
     for title, year in zip(titleList, yearList):
         scraper = webScrapeEachTitleDetail(url_domain, movie_or_show, title, year)
-        description = scraper.getDescription()
-        storage.addItem(movie_or_show, title, year, description)
+        try:
+            description = scraper.getDescription()
+            print(f"\t> description: '{description[:30]}'")
+            # links = scraper.getStreamRentBuyLinks() # under developing
+        except:
+            description = ''
+        storage.addItem(movie_or_show, title, year, description, links)
     
     print(len(storage.getStoredItems()))
+
+    filehandler = open('/reelgood-database/save.txt', 'wt')
+    data = str(storage.getStoredItems())
+    filehandler.write(data)
 
 
 if __name__ == "__main__":
