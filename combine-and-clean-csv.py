@@ -13,10 +13,13 @@ import glob
 from datetime import date
 import pandas as pd
 
+
 folder_name = 'tv'
 # folder_name = 'movies'
 
 movie_or_tv = folder_name
+parent_folder = 'reelgood-database'
+backup_folder = '(backup)'
 
 
 def cleanDf(df: pd.DataFrame):
@@ -44,7 +47,7 @@ def cleanDf(df: pd.DataFrame):
 
 def combineCsv():
     #set working directory
-    dir = os.path.join(os.getcwd(), 'reelgood-database')
+    dir = os.path.join(os.getcwd(), parent_folder)
     dir = os.path.join(dir, folder_name)
 
     os.chdir(dir)
@@ -58,17 +61,21 @@ def combineCsv():
 
     #combine all files in the list
     combined_csv = pd.concat([cleanDf(pd.read_csv(f)) for f in all_filenames])
+    
     #export to csv
-    dir =  os.chdir("..")
+    os.chdir("..")   #change dir to parent folder `/reelgood-database`
+    dir = os.getcwd()
     file_name = f"all-{movie_or_tv}.csv"
     combined_csv.to_csv(file_name, index=False, encoding='utf-8-sig')
-    #change dir to parent folder `/reelgood-database`
-    dir = os.path.join(dir, folder_name)
-    dir =  os.chdir("..")
+    print(f"> export '{dir}/{file_name}'")
+    
+    dir = os.path.join(dir, backup_folder)  #change dir to folder `/reelgood-database/(backup)`
+    os.chdir(dir)
+    dir = os.getcwd()
     today = date.today()
     file_name = f"all-{movie_or_tv}-{today}.csv"
     combined_csv.to_csv(file_name, index=False, encoding='utf-8-sig')
-
+    print(f"> export '{os.getcwd()}/{file_name}'")
 
     return combined_csv
 
