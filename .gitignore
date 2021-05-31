@@ -3,3 +3,8 @@ test/extracted_page.html
 test/extracted_description.txt
 test/extracted_html.html
 test/extracted_links.txt
+test.py
+helper/__pycache__/__init__.cpython-38.pyc
+helper/__pycache__/translateTitleToUrl.cpython-38.pyc
+helper/__pycache__/translateToUrlPath.cpython-38.pyc
+test/extracted_html_text.html

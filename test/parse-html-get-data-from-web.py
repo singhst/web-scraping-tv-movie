@@ -50,7 +50,8 @@ if __name__ == "__main__":
     # vgm_url = 'https://reelgood.com/show/the-good-doctor-2017'
     # vgm_url = 'https://reelgood.com/show/startup-2016'
     # vgm_url = 'https://reelgood.com/movie/rogue-one-a-star-wars-story-2016'
-    vgm_url = 'https://reelgood.com/movie/hellboy-2019'
+    # vgm_url = 'https://reelgood.com/movie/hellboy-2019'
+    vgm_url = 'https://reelgood.com/movie/the-intouchables-2011'
 
     html_text = requests.get(vgm_url).text
     soup = BeautifulSoup(html_text, 'html.parser')
