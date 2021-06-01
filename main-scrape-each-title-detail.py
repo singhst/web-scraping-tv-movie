@@ -112,7 +112,8 @@ def main():
     storage = tempStorage()
     links = ['']
 
-    for title, year in zip(titleList, yearList):
+    for title, year, i in zip(titleList, yearList, range(len(titleList))):
+        print("> index: ", i)
         scraper = webScrapeEachTitleDetail(url_domain, movie_or_show, title, year)
         try:
             description = scraper.getDescription()
