@@ -13,3 +13,11 @@ helper/__pycache__/getCmlArg.cpython-38.pyc
 helper/__pycache__/listAsCsv.cpython-38.pyc
 helper/__pycache__/databaseCsv.cpython-38.pyc
 helper/__pycache__/tempStorage.cpython-38.pyc
+db_helper/__pycache__/__init__.cpython-38.pyc
+db_helper/__pycache__/databaseCsv.cpython-38.pyc
+helper/__pycache__/writeToFile.cpython-38.pyc
+test/extracted_html_parsed.html
+helper/writeToFile.txt
+chromedriver_win32.zip
+geckodriver-v0.29.1-win64.zip
+test/extracted_after_btn_click.html

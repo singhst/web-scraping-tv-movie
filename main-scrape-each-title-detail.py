@@ -6,14 +6,14 @@ tv shows:   /show
 movie:      /movie
 """
 
-from typing import Iterable
 import requests
 from bs4 import BeautifulSoup
 
 from helper.translateToUrlPath import translateToUrlPath
-from db_helper.databaseCsv import databaseCsv
 from helper.getCmlArg import getCmlArg
 from helper.tempStorage import tempStorage
+from helper.writeToFile import writeToFile
+from db_helper.databaseCsv import databaseCsv
 
 
 class webScrapeEachTitleDetail():
@@ -48,7 +48,7 @@ class webScrapeEachTitleDetail():
         self.soup = BeautifulSoup(html_text, 'html.parser')
 
         # writeToFile(html_text, "extracted_html_text", "html")
-        # writeToFile(self.soup, "extracted_html", "html")
+        # writeToFile(self.soup, "extracted_html_parsed", "html")
         # print(type(self.soup))
         
         return self.soup
@@ -61,25 +61,6 @@ class webScrapeEachTitleDetail():
 
     def getLink(self):
         pass
-
-
-def writeToFile(content: Iterable[str],
-                file_name: str = "extracted",
-                file_type: str = "txt",
-                file_path: str = "test"):
-
-    if isinstance(content, list):
-        if not isinstance(content[0], str):
-            content = [str(c) for c in content]
-    elif not isinstance(content, str):
-        content = str(content)
-
-    # Program to show various ways to read and
-    # write data in a file.
-    file1 = open(f"{file_path}/{file_name}.{file_type}", "w")
-
-    file1.writelines(content)
-    file1.close()  # to change file access modes
 
 
 def test():
@@ -112,6 +93,7 @@ def main():
     storage = tempStorage()
     links = ['']
 
+    # scrape (1) links, (2) description text, (3) 
     for title, year, i in zip(titleList, yearList, range(len(titleList))):
         print("> index: ", i)
         scraper = webScrapeEachTitleDetail(url_domain, movie_or_show, title, year)

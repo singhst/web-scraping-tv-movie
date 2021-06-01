@@ -1,0 +1,31 @@
+1622535764487	geckodriver	INFO	Listening on 127.0.0.1:65300
+1622535767525	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\01709922\\AppData\\Local\\Temp\\rust_mozprofile3601Tf"
+1622535769362	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1622535772839	Marionette	INFO	Listening on port 50766
+1622535773308	Marionette	WARN	TLS certificate errors will be ignored for this session
+1622535790371	Marionette	INFO	Stopped listening on port 50766
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1622535986613	geckodriver	INFO	Listening on 127.0.0.1:51293
+1622535989648	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\01709922\\AppData\\Local\\Temp\\rust_mozprofile78Z1x7"
+1622535990229	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1622535993703	Marionette	INFO	Listening on port 52679
+1622535993816	Marionette	WARN	TLS certificate errors will be ignored for this session
+1622536555480	Marionette	INFO	Stopped listening on port 52679
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+"--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\01709922\\AppData\\Local\\Temp\\rust_mozprofileM6SBvZ"
+1622536494181	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1622536497407	Marionette	INFO	Listening on port 49371
+1622536497782	Marionette	WARN	TLS certificate errors will be ignored for this session
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_untrustedmodules_ping
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1622536555205	Marionette	INFO	Stopped listening on port 49371
