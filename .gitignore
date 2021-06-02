@@ -21,3 +21,4 @@ helper/writeToFile.txt
 chromedriver_win32.zip
 geckodriver-v0.29.1-win64.zip
 test/extracted_after_btn_click.html
+test/extracted_json.json
