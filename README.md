@@ -7,59 +7,86 @@ Data format in the web page: HTML table
 
 ## Usage
 
-Use the following command to scrap data from web.  
+1. `main-scrap-web-data.py`
 
-`-m`: option; to scrape the `Movies` table
+    Use the following command to scrap data from web.  
 
-`-t`: option; to scrape the `TV Shows` table
+    `-m`: option; to scrape the `Movies` table
 
-`trend`: argument (optional); to scrape trending `Movies` or `TV shows`
+    `-t`: option; to scrape the `TV Shows` table
+
+    `trend`: argument (optional); to scrape trending `Movies` or `TV shows`
+
+    ```sh
+    $ python main-scrap-web-data.py -m OR -t <AND trend (optional)>
+    ```
+
+    ### Example 1
+
+    Shows reminder message if no argument presents.
+
+    <img src="img\terminal-run-prog-no-args.png" style="zoom:50%;"/>
+
+    ### Example 2
+
+    Extract `trending TV Shows` at 2021.05.28.
+
+    Terminal, run the program:
+
+    ```sh
+    $ python main-scrap-web-data.py -t trend
+    ```
+
+    <img src="img\terminal-run-prog-args-tv-trend.png" style="zoom:50%;"/>
+
+    Sample of the scraped data, the first three TV titles match with the table shown in web page:
+
+    <img src="img\csv-tv-trend.png" style="zoom:40%;"/>
+
+    Web page:
+
+    <img src="img\reelgood-data-trend-tv-20210528.png" style="zoom:50%;"/>
+
+
+## **NEED CHANGE ** Note - Program Structure
 
 ```sh
-$ python main-scrap-web-data.py -m OR -t <AND trend (optional)>
-```
-
-### Example 1
-
-Shows reminder message if no argument presents.
-
-<img src="img\terminal-run-prog-no-args.png" style="zoom:50%;"/>
-
-### Example 2
-
-Extract `trending TV Shows` at 2021.05.28.
-
-Terminal, run the program:
-
-```sh
-$ python main-scrap-web-data.py -t trend
-```
-
-<img src="img\terminal-run-prog-args-tv-trend.png" style="zoom:50%;"/>
-
-Sample of the scraped data, the first three TV titles match with the table shown in web page:
-
-<img src="img\csv-tv-trend.png" style="zoom:40%;"/>
-
-Web page:
-
-<img src="img\reelgood-data-trend-tv-20210528.png" style="zoom:50%;"/>
-
-
-## Note - Program Structure
-
-```
+> tree /F
 .
-|______ reelgood-database/
-|       |______ tv/
-|       |       |______ xxx.csv
-|       |       |______ ...
-|       |______ movie/
-|       |______ tv-trend/
-|       |______ movie-trend/
-|______ main-scrap-web-data.py
-|______ main-scrap-link.py
-|______ combine-csv.py
+│   combine-and-clean-csv.py
+│   main-scrape-each-title-detail.py
+│   main-scrape-title-list.py
+│
+├───db_helper
+│       databaseCsv.py
+│       databaseMongoDB.js
+│       databaseMongoDB.py
+│       databaseMySQL.js
+│       databaseMySQL.py
+│       databaseSQLite.py
+│       __init__.py
+│   
+├───helper
+│       folderHandler.py
+│       getCmlArg.py
+│       tempStorage.py
+│       test-import-module.py
+│       translateToUrlPath.py
+│       writeToFile.py
+│       writeToFile.txt
+│       __init__.py
+│
+├───reelgood-database
+│   │   all-movies.csv
+│   │   all-tv.csv
+│   │
+│   ├───(backup)
+│   ├───movies
+│   ├───trending-movies
+│   ├───trending-tv
+│   └───tv
+│
+└───webdriver
 ```
 
 `main-scrap-web-data.py`: Main program to extract table data from web page.
@@ -70,6 +97,9 @@ Web page:
 
 
 ## Note - Routing in the web
+
+Get movie/TV show title list.
+
 ```
 https://reelgood.com
 /tv
