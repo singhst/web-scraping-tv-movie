@@ -22,3 +22,8 @@ chromedriver_win32.zip
 geckodriver-v0.29.1-win64.zip
 test/extracted_after_btn_click.html
 test/extracted_json.json
+test/extracted_jsScript.html
+test/extracted_script_text.html
+test/extracted_json.html
+test/extracted_html_source.html
+test/extracted_data.json

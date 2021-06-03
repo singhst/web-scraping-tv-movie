@@ -1,3 +1,10 @@
+someURL = 'http:\u002F\u002Fsomewebsite.com\u002Fsomefile.jpg'
+import codecs
+print(codecs.decode(someURL, 'unicode-escape'))
+# prints 'http://somewebsite.com/somefile.jpg'
+
+#########################################
+
 import re
 string = 'happy t00 go _--129.129'
 
