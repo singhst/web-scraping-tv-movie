@@ -31,11 +31,14 @@ def translateToUrlPath(domain: str,
 
     # remove title's symbols ==> keep only letter, number and space char
     title = re.sub(r'[^a-zA-Z0-9 ]+', '', title)
+
     # remove double space chars, 
     # e.g.  "Jim & Andy: The" 
     #       ==> "Jim  Andy The",    have 2 space chars 
     #       ==> "Jim Andy The",     keep only 1 space 
     title = title.replace('  ', ' ')
+    
+    # replace space to hyphen
     title = title.lower().replace(' ', '-')
 
     return f"{domain}/{movie_or_show}/{title}-{year}"
