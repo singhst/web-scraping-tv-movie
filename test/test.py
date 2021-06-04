@@ -1,3 +1,12 @@
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
+from helper.translateToUrlPath import translateToUrlPath
+
+#########################################
+
 someURL = 'http:\u002F\u002Fsomewebsite.com\u002Fsomefile.jpg'
 import codecs
 print(codecs.decode(someURL, 'unicode-escape'))

@@ -107,14 +107,13 @@ def no_clicking_on_web(driver):
 
 if __name__ == "__main__":
     
+    start_time = time.time()
+
     options = webdriver.ChromeOptions()
     options.add_argument('--ignore-certificate-errors')
     options.add_argument("--test-type")
     # options.binary_location = "/usr/bin/chromium"
     driver = webdriver.Chrome(chrome_options=options)
-
-    start_time = time.time()
-
     driver.get('https://reelgood.com/uk/movie/3-idiots-2009')
     # driver.get('https://reelgood.com/movie/lady-bird-2017')
 
