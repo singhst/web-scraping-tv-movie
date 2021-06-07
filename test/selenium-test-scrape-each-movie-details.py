@@ -72,7 +72,7 @@ def no_clicking_on_web(driver):
     bsElems = bsObj.find_all('script', type='text/javascript')
 
     string = ''
-    ary = []
+    # ary = []
     for x, i in zip(bsElems, range(len(bsElems))):
         if i == 7:
             print(i)
@@ -81,14 +81,14 @@ def no_clicking_on_web(driver):
             print("> type(string) =", type(string))
 
             # btyes_string = bytes(string, 'UTF-8')
-            print("> len(string) =", len(string))
-            print("> type(string) =", type(string))
+            # print("> len(string) =", len(string))
+            # print("> type(string) =", type(string))
 
-            ary.append(string)
+            # ary.append(string)
 
     string = string.replace("_rg.update(", "")
     string = string.replace("})", "}")
-    string = string.replace("u002F", "\\")
+    string = string.replace("\\u002F", "/")
     string = string.replace('undefined', '"undefined"')
     print("> type(string)=", type(string))
 
@@ -114,8 +114,8 @@ if __name__ == "__main__":
     options.add_argument("--test-type")
     # options.binary_location = "/usr/bin/chromium"
     driver = webdriver.Chrome(chrome_options=options)
-    driver.get('https://reelgood.com/uk/movie/3-idiots-2009')
-    # driver.get('https://reelgood.com/movie/lady-bird-2017')
+    # driver.get('https://reelgood.com/uk/movie/3-idiots-2009')
+    driver.get('https://reelgood.com/movie/lady-bird-2017')
 
     # clicking_on_web(driver)
     no_clicking_on_web(driver)
