@@ -109,3 +109,11 @@ https://reelgood.com
 &filter-rg_end=70&filter-rg_start=30
 &filter-year_end=2018&filter-year_start=1998
 ```
+
+
+## Note - Reference Database ERD
+
+Credit to: [link](https://www.databasestar.com/sample-database-movies/)
+
+<img src="img\db-movies-erd.png" style="zoom:50%;"/>
+
