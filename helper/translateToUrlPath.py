@@ -41,7 +41,9 @@ def translateToUrlPath(domain: str,
     # replace space to hyphen
     title = title.lower().replace(' ', '-')
 
-    return f"{domain}/{movie_or_show}/{title}-{year}"
+    url_slug = f"{title}-{year}"
+
+    return f"{domain}/{movie_or_show}/{url_slug}"
 
 
 if __name__ == "__main__":
@@ -51,6 +53,6 @@ if __name__ == "__main__":
     # title = "The Intouchables"
     # title = "Howl's Moving Castle"
     title = "Jim & Andy: The Great Beyond- Featuring a Very Special, Contractually Obligated Mention of Tony Clifton"
-    year = "2011"
+    year = "2017"
     url = translateToUrlPath(domain, movie_or_show, title, year)
     print(url)
