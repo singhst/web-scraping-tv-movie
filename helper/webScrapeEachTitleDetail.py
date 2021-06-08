@@ -5,15 +5,10 @@ from selenium import webdriver
 import json
 import re
 
-# The below use to change path
-import os, sys
-currentdir = os.path.dirname(os.path.realpath(__file__))
-parentdir = os.path.dirname(currentdir)
-sys.path.append(parentdir)
-## Import the lib under new path
-from helper.translateToUrlPath import translateToUrlPath
-from helper.folderHandler import folderCreate
-from helper.writeToFile import writeToFile
+import os
+from translateToUrlPath import translateToUrlPath
+from folderHandler import folderCreate
+from writeToFile import writeToFile
 
 
 """
