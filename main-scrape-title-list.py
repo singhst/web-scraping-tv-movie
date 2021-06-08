@@ -16,7 +16,7 @@ import os
 import sys
 from datetime import date
 # import getopt
-import urllib
+import urllib.request
 from bs4 import BeautifulSoup
 import selenium
 import pandas as pd

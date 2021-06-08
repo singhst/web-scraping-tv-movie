@@ -117,3 +117,44 @@ Credit to: [link](https://www.databasestar.com/sample-database-movies/)
 
 <img src="img\db-movies-erd.png" style="zoom:50%;"/>
 
+
+## Setup
+
+Set up python environment when it is a new env,
+
+1. Create new VirtualEnv:
+
+    ```sh
+    > virtualenv venv
+    ```
+
+2. Activate the VirtualEnv 
+
+    Linux:
+
+    ```sh
+    $> source venv/bin/activate
+    ```	
+    OR	
+    ```sh
+    $> . venv/bin/activate
+    ```
+	
+    Windows
+    ```sh
+    $> venv\Scripts\activate.bat
+    ```
+
+
+3. pip install requirements.txt:
+
+    ```sh
+    > pip install -r requirements.txt
+    ```
+
+
+Export venv pip requirements.txt:
+
+```sh
+> pip freeze > requirements.txt
+```

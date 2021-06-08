@@ -332,7 +332,7 @@ def main():
     movie_or_show = 'movie'
     title, year = ('Lady Bird', '2017') 
 
-    # remove title's symbols ==> keep only letter, number and space char
+    # Remove title's symbols ==> keep only letter, number and space char
     title_no_symbol = re.sub(r'[^a-zA-Z0-9 ]+', '', title)
     title_no_symbol = title_no_symbol.replace(' ', '_')
 
@@ -341,7 +341,7 @@ def main():
     scraper.setUrl(url_domain, movie_or_show, title, year)
     
 
-    #Get HTML code
+    # Get HTML code
     scraper.scrapeHtmlPageSelenium()
     soup = scraper.html_page_soup_object    #scraper.getHtmlPage()
     writeToFile(soup,
@@ -350,8 +350,8 @@ def main():
                 temp_save_path)
 
 
-    #Get .js json from <script type='text/javascript'> tag 
-    #This json contains all information about the movie/tv show
+    # Get .js json from <script type='text/javascript'> tag 
+    # This json contains all information about the movie/tv show
     meta_data = scraper.getMetaData()
     str_meta_data = json.dumps(meta_data)
     writeToFile(str_meta_data,
@@ -360,7 +360,7 @@ def main():
                 temp_save_path)
 
 
-    #Extract (1) description (2) links (3) cast & crew etc.
+    # Extract (1) description (2) links (3) cast & crew etc.
     scraper.extractTitleDetail()
     title_detail_dict = scraper.title_detail_dict
     writeToFile(json.dumps(title_detail_dict),
