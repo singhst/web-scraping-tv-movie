@@ -1,9 +1,7 @@
-import sys
 from typing import Iterable
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
 import json
 import re
 
