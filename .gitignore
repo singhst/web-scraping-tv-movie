@@ -28,3 +28,5 @@ test/extracted_json.html
 test/extracted_html_source.html
 test/extracted_data.json
 test/extracted.txt
+test/extracted_html_selenium.html
+test/extracted_html_soup.html
