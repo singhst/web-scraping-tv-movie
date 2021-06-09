@@ -43,7 +43,7 @@ class webScrapeTitleList:
         self.url_domain = url_domain
         self.url_path = url_path
 
-        self.url = f'{url_domain}/{url_path}'
+        self.url_with_path = f'{url_domain}/{url_path}'
 
         self.offset_value = 0
         self.old_offset_value = 0
@@ -119,12 +119,12 @@ class webScrapeTitleList:
 
         df = pd.DataFrame()
 
-        print("self.url =", self.url)
+        print("self.url_with_path =", self.url_with_path)
 
         while 1:
             offset = f'?offset={self.offset_value}'
-            url_with_path = self.url + offset
-            df = self.getTableData(url_with_path)
+            url_with_path_query_string = self.url_with_path + offset
+            df = self.getTableData(url_with_path_query_string)   #scrape a table data of movies/TV shows
             self.extracted_table.append(df)
             self.frames.append(df)
 

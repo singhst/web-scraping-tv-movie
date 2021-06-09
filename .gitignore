@@ -35,3 +35,8 @@ helper/__pycache__/translateToUrlPath.cpython-37.pyc
 helper/__pycache__/folderHandler.cpython-37.pyc
 helper/__pycache__/writeToFile.cpython-37.pyc
 helper_db/mysql/__pycache__/__init__.cpython-37.pyc
+helper_db/__pycache__/__init__.cpython-37.pyc
+helper_db/__pycache__/databaseCsv.cpython-37.pyc
+helper_scraping/__pycache__/__init__.cpython-37.pyc
+helper_scraping/__pycache__/webScrapeEachTitleDetail.cpython-37.pyc
+helper/__pycache__/getCmlArg.cpython-37.pyc

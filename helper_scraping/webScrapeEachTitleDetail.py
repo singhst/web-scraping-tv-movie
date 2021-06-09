@@ -27,25 +27,23 @@ movie:      /movie
 
 class webScrapeEachTitleDetail():
     """
-    0. Initialize class,
+    1. Initialize class,
 
         `> scraper = webScrapeEachTitleDetail()`
 
-    1. Set URL, 
-
-        `> scraper = webScrapeEachTitleDetail()`
+    2. Set URL, 
 
         `> scraper.setUrl(url_domain, movie_or_show, title, year)`
 
-    2. Scrape the web page,
+    3. Scrape the web page,
 
         `> scraper.scrapeHtmlPageSelenium()`
 
-    3. Extract movie/tv show data,
+    4. Extract movie/tv show data,
 
         `> scraper.extractTitleDetail()`
     
-    4. Get movie/tv show (1) title (2) description (3) links (4) cast & crews
+    5. Get movie/tv show (1) title (2) description (3) links (4) cast & crews
 
         `> title = scraper.title`
 
@@ -81,10 +79,10 @@ class webScrapeEachTitleDetail():
 
 
     def setUrl(self,
-               url_domain: str,
                movie_or_show: str,
                title: str,
-               year: str):
+               year: str,
+               url_domain: str = 'https://reelgood.com/'):
         """
         url_domain: `str`, e.g. `https://xxxx.com`
         
@@ -338,7 +336,7 @@ def main():
 
     # Get TV show or Movie data
     scraper = webScrapeEachTitleDetail()
-    scraper.setUrl(url_domain, movie_or_show, title, year)
+    scraper.setUrl(url_domain=url_domain, movie_or_show=movie_or_show, title=title, year=year)
     
 
     # Get HTML code

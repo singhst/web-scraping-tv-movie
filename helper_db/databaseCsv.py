@@ -22,17 +22,34 @@ class databaseCsv():
     def getDataFrame(self) -> pd.DataFrame:
         return self.dataframe
 
-    def getColumnsByColName(self, 
+    def getColumnsByColNames(self, 
                             col_name: Iterable[str] = ['Title', 'Year'],
-                            return_type: str = 'records') -> dict:
+                            return_type: str = 'records') -> Iterable[dict]:
         """
-        col_name: `str`; 'Title', 'Year', 'Type', 'Rating', 'IMDB Score', 'Reelgood Rating Score', 'Available On'
+        col_name: `Iterable[str]`; 'Title', 'Year', 'Type', 'Rating', 'IMDB Score', 'Reelgood Rating Score', 'Available On'
+        
+        Return
+        ------
+        `Iterable[dict]`, a `list of dict` in json format.
+
+        e.g.
+
+        [
+            {'Title': 'Breaking Bad', 'Year': 2008}, 
+
+            {'Title': 'Game of Thrones', 'Year': 2011},
+            
+            ...
+        ]
+
+        Remark
+        ------
+        `json.dumps(the_return_dict)` make return dict become JSON string.
         """
 
-        json_str_unformated = self.dataframe[col_name].to_json(orient=return_type)
-        a_dict_in_json_format = json.loads(json_str_unformated)
+        list_of_dict_in_json_format = self.dataframe[col_name].to_dict(orient=return_type)        
         
-        return a_dict_in_json_format
+        return list_of_dict_in_json_format
 
 
 if __name__ == "__main__":
@@ -49,9 +66,10 @@ if __name__ == "__main__":
 
 
     #########################################
-    a_dict = titles.getColumnsByColName()
-    print(type(a_dict))
-    print(str(a_dict)[:200])
+    a_list_of_dict = titles.getColumnsByColNames()
+    print("len(a_list_of_dict):", len(a_list_of_dict))
+    print("type(a_list_of_dict):", type(a_list_of_dict))
+    print("str(a_list_of_dict):", str(a_list_of_dict)[:200])
 
     def save_dict():
         # The below use to change path
@@ -68,13 +86,9 @@ if __name__ == "__main__":
         path = os.path.join(current_path, 'test')
         temp_save_path = folderCreate(path, 'temp_save')
 
-        writeToFile(json.dumps(a_dict),
+        writeToFile(json.dumps(a_list_of_dict),
                     f"databaseCsv_getColumnsByColName_dict",
                     "json",
                     temp_save_path)
 
     save_dict()
-
-
-    #########################################
-    print(len(titles.getColumnsByColName()))
