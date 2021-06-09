@@ -11,6 +11,8 @@ def getCmlArg() -> Iterable[str]:
     
     Return `list(str)`,
 
+        format: [<url_path>, <folder_name>]
+
         `['curated/trending-picks', 'trending-tv']`
 
         OR `['tv', 'tv']` 
@@ -62,5 +64,9 @@ def getCmlArg() -> Iterable[str]:
     sys.exit()
 
 
+
 if __name__ == "__main__":
-    getCmlArg()
+
+    url_path, folder_name = getCmlArg()
+
+    print(f"url_path={url_path}, folder_name={folder_name}")

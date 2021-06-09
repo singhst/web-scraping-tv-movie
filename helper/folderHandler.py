@@ -10,6 +10,10 @@ def folderExist(path: str) -> bool:
 def folderCreate(path: str,
                  foldername: str = ''):
     """
+    Return
+    ------
+    `str`, path of the folder.
+
     https://www.geeksforgeeks.org/create-a-directory-in-python/
     """
     path = os.path.join(path, foldername)
