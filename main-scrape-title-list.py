@@ -1,6 +1,9 @@
 #!/usr/bin/env python
-"""Extract TV Shows and Movies in Reelgood.com.
+"""
+Function,
+Extract all TV Shows and Movies tables in Reelgood.com.
 
+#########################
     * main - the main function of the script
 
     https://reelgood.com

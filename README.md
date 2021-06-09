@@ -125,7 +125,7 @@ Set up python environment when it is a new env,
 1. Create new VirtualEnv:
 
     ```sh
-    > virtualenv venv
+    $> virtualenv venv
     ```
 
 2. Activate the VirtualEnv 
@@ -149,12 +149,12 @@ Set up python environment when it is a new env,
 3. pip install requirements.txt:
 
     ```sh
-    > pip install -r requirements.txt
+    $> pip install -r requirements.txt
     ```
 
 
 Export venv pip requirements.txt:
 
 ```sh
-> pip freeze > requirements.txt
+$> pip freeze > requirements.txt
 ```
