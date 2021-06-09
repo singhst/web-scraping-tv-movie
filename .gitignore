@@ -34,3 +34,4 @@ helper/__pycache__/__init__.cpython-37.pyc
 helper/__pycache__/translateToUrlPath.cpython-37.pyc
 helper/__pycache__/folderHandler.cpython-37.pyc
 helper/__pycache__/writeToFile.cpython-37.pyc
+helper_db/mysql/__pycache__/__init__.cpython-37.pyc
