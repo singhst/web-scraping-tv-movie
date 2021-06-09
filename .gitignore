@@ -30,3 +30,5 @@ test/extracted_data.json
 test/extracted.txt
 test/extracted_html_selenium.html
 test/extracted_html_soup.html
+helper/__pycache__/__init__.cpython-37.pyc
+helper/__pycache__/translateToUrlPath.cpython-37.pyc

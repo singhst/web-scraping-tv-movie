@@ -1,3 +1,15 @@
+
+a_dictionary = {"name" : "John", "age" : 35, "height" : 65}
+
+dict_items = a_dictionary.items()
+print(dict_items)
+
+
+first_two = list(dict_items)[:2]
+print(first_two)
+
+##########################################
+
 import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)

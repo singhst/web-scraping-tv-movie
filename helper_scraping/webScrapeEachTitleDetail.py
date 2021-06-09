@@ -188,7 +188,7 @@ class webScrapeEachTitleDetail():
         temp_str = temp_str.replace("_rg.update(", "")
         temp_str = temp_str.replace("})", "}")
         # temp_str = temp_str.replace("\\u002F", "/")
-        temp_str = self.unicodeToChar(temp_str)
+        # temp_str = self.unicodeToChar(temp_str)
         temp_str = temp_str.replace('undefined', '"undefined"')
         # print("> type(temp_str)=", type(temp_str))
 
