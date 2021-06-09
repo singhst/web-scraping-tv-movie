@@ -1,0 +1,9 @@
+-- run the mysql and phpmyadmin containers
+docker run --name mysql -e MYSQL_ROOT_PASSWORD=password123 -e MYSQL_DATABASE=user -p 3306:3306 -d mysql
+docker run --name phpmyadmin --link mysql:db -p 8089:80 -d phpmyadmin/phpmyadmin
+
+-- stop the mysql and phpmyadmin containers
+docker stop phpmyadmin mysql
+
+-- remove the mysql and phpmyadmin containers
+docker rm phpmyadmin mysql
