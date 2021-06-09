@@ -1,4 +1,28 @@
+import pandas as pd
+import json
+df = pd.DataFrame(
+    [["a", "b"], ["c", "d"]],
+    index=["row 1", "row 2"],
+    columns=["col 1", "col 2"],
+)
 
+json_str_unformated = df.to_json(orient="split")
+a_dict = json.loads(json_str_unformated)
+json_str_formated = json.dumps(a_dict, indent=4)
+
+print("json_str_unformated:", json_str_unformated) 
+print("type(json_str_unformated):", type(json_str_unformated)) 
+
+print("a_dict:",a_dict)
+print("type(a_dict):", type(a_dict))
+
+print(json_str_formated)
+print("type(json_str_formated):", type(json_str_formated))
+
+
+print("##########################################")
+
+##########################################
 a_dictionary = {"name" : "John", "age" : 35, "height" : 65}
 
 dict_items = a_dictionary.items()
