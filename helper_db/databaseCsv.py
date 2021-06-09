@@ -59,8 +59,9 @@ if __name__ == "__main__":
     path = os.path.join(current_path, 'test')
     temp_save_path = folderCreate(path, 'temp_save')
 
-    writeToFile(a_dict,
-                f"",
+    import json
+    writeToFile(json.dumps(a_dict),
+                f"databaseCsv_getColumnsByColName_dict",
                 "json",
                 temp_save_path)
 
