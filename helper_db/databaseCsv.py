@@ -1,4 +1,15 @@
+from typing import Iterable
 import pandas as pd
+
+
+# The below use to change path
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+## Import the lib under new path
+from helper.folderHandler import folderCreate
+
 
 class databaseCsv():
 
@@ -19,11 +30,11 @@ class databaseCsv():
     def getDataFrame(self) -> pd.DataFrame:
         return self.dataframe
 
-    def getColumnByColName(self, col_name: str = 'Title') -> list:
+    def getColumnsByColName(self, col_name: Iterable[str] = ['Title', 'Year']) -> dict:
         """
         col_name: `str`; 'Title', 'Year', 'Type', 'Rating', 'IMDB Score', 'Reelgood Rating Score', 'Available On'
         """
-        return self.dataframe[col_name].tolist()
+        return self.dataframe[col_name].to_dict('list')
 
 
 if __name__ == "__main__":
@@ -34,7 +45,10 @@ if __name__ == "__main__":
         movies_or_tv,
         # folder_path
     )
+
     print(titles.getDataFrame())
 
-    print(titles.getColumnByColName()[:10])
-    print(len(titles.getColumnByColName()))
+    a_dict = titles.getColumnsByColName()
+    print(str(a_dict)[:200])
+
+    print(len(titles.getColumnsByColName()))
