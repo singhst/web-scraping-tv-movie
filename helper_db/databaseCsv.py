@@ -2,15 +2,6 @@ from typing import Iterable
 import pandas as pd
 
 
-# The below use to change path
-import os, sys
-currentdir = os.path.dirname(os.path.realpath(__file__))
-parentdir = os.path.dirname(currentdir)
-sys.path.append(parentdir)
-## Import the lib under new path
-from helper.folderHandler import folderCreate
-
-
 class databaseCsv():
 
     def __init__(self,
@@ -46,9 +37,33 @@ if __name__ == "__main__":
         # folder_path
     )
 
+    #########################################
     print(titles.getDataFrame())
 
+
+    #########################################
     a_dict = titles.getColumnsByColName()
     print(str(a_dict)[:200])
 
+    # The below use to change path
+    import os, sys
+    currentdir = os.path.dirname(os.path.realpath(__file__))
+    parentdir = os.path.dirname(currentdir)
+    sys.path.append(parentdir)
+    ## Import the lib under new path
+    from helper.folderHandler import folderCreate
+    from helper.writeToFile import writeToFile
+
+    # Create folders to save scraped data
+    current_path = os.getcwd()
+    path = os.path.join(current_path, 'test')
+    temp_save_path = folderCreate(path, 'temp_save')
+
+    writeToFile(a_dict,
+                f"",
+                "json",
+                temp_save_path)
+
+
+    #########################################
     print(len(titles.getColumnsByColName()))
