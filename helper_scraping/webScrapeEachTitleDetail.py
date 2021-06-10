@@ -82,7 +82,7 @@ class webScrapeEachTitleDetail():
                movie_or_show: str,
                title: str,
                year: str,
-               url_domain: str = 'https://reelgood.com/'):
+               url_domain: str = 'https://reelgood.com'):
         """
         url_domain: `str`, e.g. `https://xxxx.com`
         
@@ -100,6 +100,8 @@ class webScrapeEachTitleDetail():
         
         self.url = translateToUrlPath(url_domain, movie_or_show, title, year)
         print("> webScrapeEachTitleDetail, self.url =", self.url)
+
+        self.title = title
 
 
     def setUrlDirectly(self,
@@ -133,13 +135,18 @@ class webScrapeEachTitleDetail():
         # print(type(self.html_page_soup_object))
 
 
-    def scrapeHtmlPageSelenium(self):
+    def scrapeHtmlPageSelenium(self) -> bool:
         """
         (1) Extract the HTML page by Selenium, then convert the Selenium object to BeautifulSoup object, and save it in class object.
         
         (2) Save the extracted meta data in class object (`dict` type).
 
-        Return: `None`
+        Return
+        ------
+        `bool` 
+        
+        1. `True`:  Detail info of this movie/TV show exits in the web page
+        2. `False`: Web page does not exist
         """
 
         # Selenium settings
@@ -147,30 +154,43 @@ class webScrapeEachTitleDetail():
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--test-type")
         # options.binary_location = "/usr/bin/chromium"
-        driver = webdriver.Chrome(chrome_options=options)
-        
+        self.driver = webdriver.Chrome(chrome_options=options) # Create browser 
+
         # Selenium extracts html page from url
-        driver.get(self.url)
-        html_text = driver.page_source
+        # self.driver.delete_all_cookies(); # Deletes all the cookies
+        self.driver.get(self.url)
+        html_text = self.driver.page_source
+
+        self.driver.quit()  # Close browser 
 
         # Convert Selenium object into BeautifulSoup object
         self.html_page_soup_object = BeautifulSoup(html_text, 'html.parser')
 
         # structured json data is in the HTML tag <script type="text/javascript">
-        self.meta_data = self.extractJsTagJson()
+        if self.extractJsTagJson() is not None:
+            self.meta_data = self.extractJsTagJson()
+            return True
+        
+        return False
+
 
 
     def extractJsTagJson(self) -> dict:
         """Because we found that the structural info of a movie/tv show is stored inside a JSON 
         under HTML tag <script type="text/javascript">
         """
-        # structured json data is in the HTML tag <script type="text/javascript">
-        bs_elems = self.html_page_soup_object.find_all('script', type='text/javascript')
-        bs_single_elem = self.cleanMetaData(bs_elems)
-        
-        bs_single_elem = self.strToDict(bs_single_elem)
+        try:
+            # structured json data is in the HTML tag <script type="text/javascript">
+            bs_elems = self.html_page_soup_object.find_all('script', type='text/javascript')
+            bs_single_elem = self.cleanMetaData(bs_elems)
+            
+            bs_single_elem = self.strToDict(bs_single_elem)
 
-        return bs_single_elem['bootstrap']['entities']['entries']
+            return bs_single_elem['bootstrap']['entities']['entries']
+
+        except:
+            # print(f"> `{self.title}` not found!")
+            return None
 
 
     def cleanMetaData(self, bs_elems) -> str:
@@ -325,10 +345,12 @@ def main():
     ('Joker', '2019') 
     ('Lady Bird', '2017') 
     ('3 Idiots', '2009') 
+    ('spirited away', '2003')
+    ('The Intouchables', '2011')
     """
     url_domain = 'https://reelgood.com'
     movie_or_show = 'movie'
-    title, year = ('Lady Bird', '2017') 
+    title, year = ('3 Idiots', '2009')
 
     # Remove title's symbols ==> keep only letter, number and space char
     title_no_symbol = re.sub(r'[^a-zA-Z0-9 ]+', '', title)
@@ -340,70 +362,73 @@ def main():
     
 
     # Get HTML code
-    scraper.scrapeHtmlPageSelenium()
-    soup = scraper.html_page_soup_object    #scraper.getHtmlPage()
-    writeToFile(soup,
-                f"extracted_{title_no_symbol}_{year}_0_html_selenium", 
-                "html", 
-                temp_save_path)
+    # and Check whether the info of this movie/tv show exist or not
+    if not scraper.scrapeHtmlPageSelenium():
+        print(f"> `{title}, {year}` not found!")
+    else:
+        soup = scraper.html_page_soup_object    #scraper.getHtmlPage()
+        writeToFile(soup,
+                    f"extracted_{title_no_symbol}_{year}_0_html_selenium", 
+                    "html", 
+                    temp_save_path)
 
 
-    # Get .js json from <script type='text/javascript'> tag 
-    # This json contains all information about the movie/tv show
-    meta_data = scraper.getMetaData()
-    str_meta_data = json.dumps(meta_data)
-    writeToFile(str_meta_data,
-                f"extracted_{title_no_symbol}_{year}_1_meta", 
-                "json", 
-                temp_save_path)
+        # Get .js json from <script type='text/javascript'> tag 
+        # This json contains all information about the movie/tv show
+        meta_data = scraper.getMetaData()
+        str_meta_data = json.dumps(meta_data)
+        writeToFile(str_meta_data,
+                    f"extracted_{title_no_symbol}_{year}_1_meta", 
+                    "json", 
+                    temp_save_path)
 
 
-    # Extract (1) description (2) links (3) cast & crew etc.
-    scraper.extractTitleDetail()
-    title_detail_dict = scraper.title_detail_dict
-    writeToFile(json.dumps(title_detail_dict),
-                f"extracted_{title_no_symbol}_{year}_2_{movie_or_show}_detail", 
-                "json", 
-                temp_save_path)
+        # Extract (1) description (2) links (3) cast & crew etc.
+        scraper.extractTitleDetail()
+        title_detail_dict = scraper.title_detail_dict
+        writeToFile(json.dumps(title_detail_dict),
+                    f"extracted_{title_no_symbol}_{year}_2_{movie_or_show}_detail", 
+                    "json", 
+                    temp_save_path)
 
 
-    movie_id = scraper.rg_id
-    movie_title = scraper.title
-    description = scraper.description
-    links = scraper.title_links
-    cast_crew = scraper.cast_crew
+        movie_id = scraper.rg_id
+        movie_title = scraper.title
+        description = scraper.description
+        links = scraper.title_links
+        cast_crew = scraper.cast_crew
 
-    _title_links_dict_list = scraper._title_links_dict_list
-    _cast_crew_dict_list = scraper._cast_crew_dict_list
+        _title_links_dict_list = scraper._title_links_dict_list
+        _cast_crew_dict_list = scraper._cast_crew_dict_list
 
-    writeToFile(description,
-                f"extracted_{title_no_symbol}_{year}_description",
-                file_path=demo_save_path)
-    writeToFile(json.dumps(links),
-                f"extracted_{title_no_symbol}_{year}_links",
-                "json",
-                demo_save_path)
-    writeToFile(json.dumps(cast_crew),
-                f"extracted_{title_no_symbol}_{year}_cast_crew",
-                "json",
-                demo_save_path)
-
-
-    writeToFile(json.dumps(_title_links_dict_list),
-                f"extracted_{title_no_symbol}_{year}_4_links_dict_list",
-                "json",
-                temp_save_path)
-    writeToFile(json.dumps(_cast_crew_dict_list),
-                f"extracted_{title_no_symbol}_{year}_5_cast_crew_dict_list",
-                "json",
-                temp_save_path)
+        writeToFile(description,
+                    f"extracted_{title_no_symbol}_{year}_description",
+                    file_path=demo_save_path)
+        writeToFile(json.dumps(links),
+                    f"extracted_{title_no_symbol}_{year}_links",
+                    "json",
+                    demo_save_path)
+        writeToFile(json.dumps(cast_crew),
+                    f"extracted_{title_no_symbol}_{year}_cast_crew",
+                    "json",
+                    demo_save_path)
 
 
-    print("1) movie_id:", movie_id)
-    print("2) movie_title:", movie_title)
-    print("3) description:", description)
-    print(f"4) links: {type(links)}, {links}")
-    print("5) cast_crew[0]:", cast_crew[0])
+        writeToFile(json.dumps(_title_links_dict_list),
+                    f"extracted_{title_no_symbol}_{year}_4_links_dict_list",
+                    "json",
+                    temp_save_path)
+        writeToFile(json.dumps(_cast_crew_dict_list),
+                    f"extracted_{title_no_symbol}_{year}_5_cast_crew_dict_list",
+                    "json",
+                    temp_save_path)
+
+
+        print("1) movie_id:", movie_id)
+        print("2) movie_title:", movie_title)
+        print("3) description:", description)
+        print(f"4) links: {type(links)}, {links}")
+        print("5) cast_crew[0]:", cast_crew[0])
 
 
 if __name__ == "__main__":
