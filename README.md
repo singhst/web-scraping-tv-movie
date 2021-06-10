@@ -50,7 +50,9 @@ Data format in the web page: HTML table
 
 ## Missing features
 
-1. Log the can't-find title of movie/TV show
+1. Save scrape table data into mysql `main-scrape-title-list.py`
+2. Log the can't-find title of movie/TV show
+2. not finish `def extractCastCrew(self) -> list:` in `webScrapeEachTitleDetail.py`
 
 
 ## **NEED CHANGE ** Note - Program Structure
@@ -128,6 +130,9 @@ def scrapeHtmlPageSelenium(self) -> bool:
 Credit to: [link](https://www.databasestar.com/sample-database-movies/)
 
 <img src="img\db-movies-erd.png" style="zoom:50%;"/>
+
+
+[template](https://examples.javacodegeeks.com/crud-operations-in-python-on-mysql/)
 
 
 ## Browser driver Setup
