@@ -132,7 +132,7 @@ Credit to: [link](https://www.databasestar.com/sample-database-movies/)
 <img src="img\db-movies-erd.png" style="zoom:50%;"/>
 
 
-[template](https://examples.javacodegeeks.com/crud-operations-in-python-on-mysql/)
+https://examples.javacodegeeks.com/crud-operations-in-python-on-mysql/
 
 
 ## Browser driver Setup
