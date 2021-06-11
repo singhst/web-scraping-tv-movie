@@ -1,3 +1,1 @@
-from helper import translateToUrlPath
-
-translateToUrlPath.translateToUrlPath()
+from helper.translateToUrlPath import translateToUrlPath
