@@ -1,8 +1,0 @@
--- browser url for phpmyadmin console
-http://localhost:8089/
-
--- login credentials
-username - root
-password - password123
-
--- default database name = user
