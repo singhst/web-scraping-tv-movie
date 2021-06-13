@@ -8,6 +8,7 @@ def createTable(db_connection, table_name: str):
 
     # creating database_cursor to perform SQL operation
     db_cursor = db_connection.cursor()
+<<<<<<< HEAD
     
     # sql query
     sql_query = f'''
@@ -27,3 +28,10 @@ def createTable(db_connection, table_name: str):
 
     except(Exception, mysqlError) as error:
         print(f'> Error = `{error}`')
+=======
+    db_connection
+
+    sql_query = '''
+        CREATE TABLE IF NOT EXIST 
+    '''
+>>>>>>> 33468ae649099cc102ca67ae9750b30bf1a9cb11
