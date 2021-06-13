@@ -53,6 +53,7 @@ class setupDatabase():
         self.importDbConfig()
         self.connectServer()
         self.checkCreateDatabase()
+        self.usingDb()
 
 
     def importDbConfig(self):
@@ -63,7 +64,7 @@ class setupDatabase():
             self.db_config = readConfig()
 
             self.host = self.db_config.get('DB', 'host')
-            self.database = self.db_config.get('DB', 'database')
+            # self.database = self.db_config.get('DB', 'database')
             self.user = self.db_config.get('DB', 'username')
             self.password = self.db_config.get('DB', 'password')
             self.port = self.db_config.get('DB', 'port')
@@ -99,7 +100,7 @@ class setupDatabase():
             return None
             
         except(Exception, mysqlError) as error:
-            print(f'==> Connection fail.')
+            print(f'==> Fail.')
             print(f'> Error = `{error}`')
 
 
@@ -116,6 +117,28 @@ class setupDatabase():
         self.db_cursor.execute(sql_query)
 
         print(f'==> Done!')
+
+
+    def usingDb(self):
+        print(f'> Using database `{self.database}`... ', end='')
+        try:
+            self.db_connection = mysql.connector.connect(
+                host = self.host,
+                database = self.database,
+                user = self.user,
+                password = self.password,
+                port = self.port
+            )
+            print('==> Done!')
+
+            # creating database_cursor to perform SQL operation
+            self.db_cursor = self.db_connection.cursor()
+
+            return None
+            
+        except(Exception, mysqlError) as error:
+            print(f'==> Fail.')
+            print(f'> Error = `{error}`')
 
 
     def getDbList(self):
