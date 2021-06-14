@@ -10,14 +10,19 @@ def createTable(db_connection, table_name: str):
     db_cursor = db_connection.cursor()
     
     # sql query
+    #"rg_id": "55a2e378-dfb0-4473-b105-7478bb1dcfc1",
     sql_query = f'''
         CREATE TABLE IF NOT EXISTS {table_name} (
-            id INT NOT NULL, 
-            Title VARCHAR(255), 
-            Year INT, 
-            Rating INT, 
-            IMDBScore INT, 
-            ReelgoodRatingScore INT
+            rg_id VARCHAR(50) NOT NULL, 
+            scraped_date Date NOT NULL DEFAULT now(),
+            scraped_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            title VARCHAR(255), 
+            description VARCHAR(512),
+            year INT, 
+            rating VARCHAR(10), 
+            imdb_score VARCHAR(10),     
+            reelgood_rating_score VARCHAR(10),
+            PRIMARY KEY(rg_id)
         );
     '''
 
@@ -26,4 +31,5 @@ def createTable(db_connection, table_name: str):
         print('==> Done!')
 
     except(Exception, mysqlError) as error:
+        print(f'==> Fail.')
         print(f'> Error = `{error}`')
