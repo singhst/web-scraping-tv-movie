@@ -58,7 +58,7 @@ class setupDatabase():
 
     def importDbConfig(self):
 
-        print(f'> Reading MySQL .env config file... ')
+        print(f'> Reading MySQL .env config file... ', end='')
 
         try:
             self.db_config = readConfig()
@@ -69,7 +69,7 @@ class setupDatabase():
             self.password = self.db_config.get('DB', 'password')
             self.port = self.db_config.get('DB', 'port')
 
-            print('\t==> Done!')
+            print('==> Done!')
 
         except(Exception, configError) as error:
             print(f'\t> Error. Error code = `{error}`')
@@ -83,7 +83,7 @@ class setupDatabase():
 
         Connection to a MySQL Server
         """
-        print(f'> Connecting to MySQL server... ')
+        print(f'> Connecting to MySQL server... ', end='')
         try:
             self.db_connection = mysql.connector.connect(
                 host = self.host,
@@ -92,7 +92,7 @@ class setupDatabase():
                 password = self.password,
                 port = self.port
             )
-            print('\t==> Done!')
+            print('==> Done!')
 
             # creating database_cursor to perform SQL operation
             self.db_cursor = self.db_connection.cursor()
@@ -100,7 +100,7 @@ class setupDatabase():
             return None
             
         except(Exception, mysqlError) as error:
-            print(f'\t==> Fail.')
+            print(f'\n\t==> Fail.')
             print(f'\t> Error = `{error}`')
 
 
@@ -110,17 +110,17 @@ class setupDatabase():
         CREATE DATABASE IF NOT EXISTS DBName;
 
         """
-        print(f'> Created database `{self.database}`... ')
+        print(f'> Created database `{self.database}`... ', end='')
 
         # executing cursor with execute method and pass SQL query
         sql_query = f"CREATE DATABASE IF NOT EXISTS {self.database};"
         self.db_cursor.execute(sql_query)
 
-        print(f'\t==> Done!')
+        print(f'==> Done!')
 
 
     def usingDb(self):
-        print(f'> Using database `{self.database}`... ')
+        print(f'> Using database `{self.database}`... ', end='')
         try:
             self.db_connection = mysql.connector.connect(
                 host = self.host,
@@ -129,7 +129,7 @@ class setupDatabase():
                 password = self.password,
                 port = self.port
             )
-            print('\t==> Done!')
+            print('==> Done!')
 
             # creating database_cursor to perform SQL operation
             self.db_cursor = self.db_connection.cursor()
@@ -137,7 +137,7 @@ class setupDatabase():
             return None
             
         except(Exception, mysqlError) as error:
-            print(f'\t==> Fail.')
+            print(f'\n\t==> Fail.')
             print(f'\t> Error = `{error}`')
 
 

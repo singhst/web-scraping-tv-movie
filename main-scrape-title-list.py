@@ -131,6 +131,8 @@ class webScrapeTitleList:
             print("self.offset_value =", self.offset_value)
             # print('df.iloc[[0]] =', df.iloc[[0]])
 
+            # If all titles of movie/TV show are extracted
+            # concat the df list and export to .csv
             if df is None:
                 self.combineAndExportDataFrame()
                 print()

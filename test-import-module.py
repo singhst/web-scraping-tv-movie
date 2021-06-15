@@ -21,9 +21,19 @@ createTable(db_connection, table_name=db_table)
 # + Rent or Buy
 insert_a_row(db_connection, 
              table_name=db_table, 
-             rg_id= '55a2e378-dfb0-4473-b105-7478bb1dcfc1',
+             rg_id= '4355a2e378-dfb0-4473-b105-7478bb1dcfc1',
              title='Se7en', 
              year='1995', 
              rating='18+',
              imdb_score='8.6/10',
              reelgood_rating_score='100/100')
+
+
+insert_n_rows(db_connection,
+              table_name=db_table,
+              rg_id='355a2e378-dfb0-4473-b105-7478bb1dcfc1',
+              title='Se7en',
+              year='1995',
+              rating='18+',
+              imdb_score='8.6/10',
+              reelgood_rating_score='100/100')

@@ -35,7 +35,7 @@ def writeToFile(content: Iterable[str],
     file1.writelines(content)
     file1.close()  # to change file access modes
 
-    print('\t \t==> Done!')
+    print('\t ==> Done!')
 
 
 def clicking_on_web(driver):
