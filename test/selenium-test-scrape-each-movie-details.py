@@ -20,7 +20,7 @@ def writeToFile(content: Iterable[str],
                 file_path: str = "test"):
 
     print(
-        f'> writing "{file_name}.{file_type}" to path "/{file_path}/"', end='')
+        f'> writing "{file_name}.{file_type}" to path "/{file_path}/"')
 
     if isinstance(content, list):
         if not isinstance(content[0], str):
@@ -35,7 +35,7 @@ def writeToFile(content: Iterable[str],
     file1.writelines(content)
     file1.close()  # to change file access modes
 
-    print('\t ==> DONE!')
+    print('\t \t==> Done!')
 
 
 def clicking_on_web(driver):

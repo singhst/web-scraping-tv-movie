@@ -4,7 +4,7 @@ from mysql.connector import Error as mysqlError
 def createTable(db_connection, table_name: str):
     """
     """
-    print(f'> Creating table `{table_name}` in `{db_connection.database}` database... ', end='')
+    print(f'> Creating table `{table_name}` in `{db_connection.database}` database... ')
 
     # creating database_cursor to perform SQL operation
     db_cursor = db_connection.cursor()
@@ -28,8 +28,8 @@ def createTable(db_connection, table_name: str):
 
     try:
         db_cursor.execute(sql_query)
-        print('==> Done!')
+        print('\t==> Done!')
 
     except(Exception, mysqlError) as error:
-        print(f'==> Fail.')
-        print(f'> Error = `{error}`')
+        print(f'\t==> Fail.')
+        print(f'\t> Error = `{error}`')

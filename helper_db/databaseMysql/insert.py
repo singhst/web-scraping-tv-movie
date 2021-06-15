@@ -12,7 +12,7 @@ def insert_a_row(db_connection,
            imdb_score: str, 
            reelgood_rating_score: str):
 
-    print(f'> Inserting a record in `{db_connection.database}` database... ', end='')
+    print(f'> Inserting a record in `{db_connection.database}` database... ')
 
     db_cursor = db_connection.cursor()
 
@@ -30,11 +30,11 @@ def insert_a_row(db_connection,
         print(">", db_cursor.rowcount, "Record inserted successfully into Laptop table")
         db_cursor.close()
 
-        print(f'==> Done!')
+        print(f'\t==> Done!')
 
     except(Exception, mysqlError) as error:
-        print(f'==> Fail.')
-        print(f'> Error = `{error}`')
+        print(f'\t==> Fail.')
+        print(f'\t> Error = `{error}`')
 
     finally:
         if db_connection.is_connected():

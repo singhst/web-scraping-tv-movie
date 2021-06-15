@@ -20,7 +20,7 @@ def writeToFile(content: Iterable[str],
     file1.writelines(content)
     file1.close()  # to change file access modes
 
-    print('\t ==> DONE!')
+    print('\t==> Done!')
 
 
 if __name__ == "__main__":

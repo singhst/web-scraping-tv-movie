@@ -74,6 +74,6 @@ def main(get_movie_or_tv: str = 'movies'):
 
 if __name__ == "__main__":
     
-    get_movie_or_tv = 'movies'   #'tv'
+    get_movie_or_tv = 'movie'   #'tv'
 
     main(get_movie_or_tv)
