@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import selenium
 import pandas as pd
 
-def get_table_data(url: str, class_of_table: str) -> pd.DataFrame:
+def getTableData(url: str, class_of_table: str) -> pd.DataFrame:
     
     # add User-Agent to header to pretend as browser visit, more detials can be found in FireBug plugin    
     # if we don't add the below, error message occurs. ERROR: urllib.error.HTTPError: HTTP Error 403: Forbidden
@@ -30,6 +30,6 @@ def click_load_more_button():
 
 url = 'https://reelgood.com/curated/trending-picks?offset=25000'
 class_of_table = 'css-1179hly'
-df = get_table_data(url, class_of_table)
+df = getTableData(url, class_of_table)
 print(df)
 print(df.shape)
