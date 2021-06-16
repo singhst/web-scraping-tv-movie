@@ -99,7 +99,7 @@ class webScrapeTitleList:
         except:
             return None
 
-    def combineAndExportDataFrame(self):
+    def combineAndExportDataframe(self):
         concat_frames = pd.concat(self.frames)
         
         today = date.today()
@@ -129,12 +129,13 @@ class webScrapeTitleList:
             self.frames.append(df)
 
             print("self.offset_value =", self.offset_value)
+            print('df.dtypes =', df.dtypes)
             # print('df.iloc[[0]] =', df.iloc[[0]])
 
             # If all titles of movie/TV show are extracted
             # concat the df list and export to .csv
             if df is None:
-                self.combineAndExportDataFrame()
+                self.combineAndExportDataframe()
                 print()
                 print(f'end offset={self.offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
                 print(f'type(self.extracted_table[-1])={type(self.extracted_table[-1])}')
@@ -143,7 +144,7 @@ class webScrapeTitleList:
 
             if (self.offset_value % (10000) == 0) and (self.offset_value > 0):
                 # if (self.offset_value % 50) == 0:
-                self.combineAndExportDataFrame()
+                self.combineAndExportDataframe()
 
             self.offset_value += 50
 

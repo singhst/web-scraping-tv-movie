@@ -24,10 +24,10 @@ from helper_db.databaseCsv import databaseCsv
 from helper_scraping.webScrapeEachTitleDetail import webScrapeEachTitleDetail
 
 
-def main(get_movie_or_tv: str = 'movies'):
+def main(get_movies_or_tv: str = 'movies'):
     # Create folders to save scraped data
     current_path = os.getcwd()
-    folder_path = f'reelgood-database/{get_movie_or_tv}'
+    folder_path = f'reelgood-database/{get_movies_or_tv}'
     path = os.path.join(current_path, folder_path)
     print(path)
     
@@ -43,7 +43,7 @@ def main(get_movie_or_tv: str = 'movies'):
     # Scrape detail info of each movie / TV show 
     scraper = webScrapeEachTitleDetail()
     url_domain = 'https://reelgood.com'
-    movie_or_show = get_movie_or_tv
+    movie_or_show = get_movies_or_tv.replace('s', '')
 
     for i, a_dict in zip(range(len(db_table_dict_list)), db_table_dict_list):
         title = a_dict.get('Title')
@@ -74,6 +74,6 @@ def main(get_movie_or_tv: str = 'movies'):
 
 if __name__ == "__main__":
     
-    get_movie_or_tv = 'movie'   #'tv'
+    get_movies_or_tv = 'movies'   #'tv'
 
-    main(get_movie_or_tv)
+    main(get_movies_or_tv)
