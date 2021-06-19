@@ -233,6 +233,7 @@ class setupDatabase():
 if __name__ == "__main__":
     
     db_name = 'movies'
+    db_table_name = db_name.replace('s', '')
 
-    db = setupDatabase(db_name)
+    db = setupDatabase(db_name, db_table_name)
     db_connection = db.getConnection()
