@@ -11,7 +11,8 @@ def getDataFromCsv():
     # last_col_index = len(df.columns) - 1
     df = df.iloc[:, 0:-1] #remove last column 'Available On'; get all rows, 1st col to (last - 1) col
     df = df.head(12)
-    df.insert(0, 'rg_id', 'x')
+    df.insert(0, 'rg_id', '')
+    df.insert(3, 'overview', '')
     df = df.applymap(str)  # change all columns dtype to string
     record = list(df.to_records(index=False))
 
@@ -41,6 +42,7 @@ if __name__ == '__main__':
                                      rg_id='4355a2e378-dfb0-4473-b105-7478bb1dcfc1',
                                      title='Se7en',
                                      year='1995',
+                                     overview='',
                                      rating='18+',
                                      imdb_score='8.6/10',
                                      reelgood_rating_score='100/100',

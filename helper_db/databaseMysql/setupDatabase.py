@@ -138,11 +138,11 @@ class setupDatabase():
         sql_query = f'''
             CREATE TABLE IF NOT EXISTS {self.db_table_name} (
                 id INT NOT NULL AUTO_INCREMENT,
-                rg_id VARCHAR(50) NOT NULL, 
                 scraped_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                rg_id VARCHAR(50) NOT NULL, 
                 title VARCHAR(255), 
-                description VARCHAR(512),
                 year INT, 
+                overview VARCHAR(512),
                 rating VARCHAR(10), 
                 imdb_score VARCHAR(10),     
                 reelgood_rating_score VARCHAR(10),

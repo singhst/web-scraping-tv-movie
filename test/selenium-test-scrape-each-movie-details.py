@@ -62,7 +62,7 @@ def clicking_on_web(driver):
 
 
 def no_clicking_on_web(driver):
-    # Scrap the web page containing (1) description text, (2) Stream links (3) Rent/But links
+    # Scrap the web page containing (1) overview text, (2) Stream links (3) Rent/But links
     html_source = driver.page_source
     print("> type(html_source) =", type(html_source))
 

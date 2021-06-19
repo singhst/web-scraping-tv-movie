@@ -43,11 +43,11 @@ class webScrapeEachTitleDetail():
 
         `> scraper.extractTitleDetail()`
     
-    5. Get movie/tv show (1) title (2) description (3) links (4) cast & crews
+    5. Get movie/tv show (1) title (2) overview (3) links (4) cast & crews
 
         `> title = scraper.title`
 
-        `> description = scraper.description`
+        `> overview = scraper.overview`
 
         `> links = scraper.title_links`
 
@@ -71,7 +71,7 @@ class webScrapeEachTitleDetail():
         self.title_detail_dict = {}
         self.rg_id = ''
         self.title = ''
-        self.description = ''
+        self.overview = ''
         self._title_links_dict_list = Iterable[dict]
         self.title_links = Iterable[str]
         self._cast_crew_dict_list = Iterable[dict]
@@ -230,7 +230,7 @@ class webScrapeEachTitleDetail():
         self.title_detail_dict = {}
         self.rg_id = ''
         self.title = ''
-        self.description = ''
+        self.overview = ''
         self.title_links = Iterable[str]
         self.cast_crew = Iterable[str]
         """
@@ -242,7 +242,7 @@ class webScrapeEachTitleDetail():
         # print("\t> self.title_detail_dict =", self.title_detail_dict)
         self.rg_id = self.title_detail_dict['rg_id']
         self.title = self.title_detail_dict['title']
-        self.description = self.title_detail_dict['overview']
+        self.overview = self.title_detail_dict['overview']
         self.title_links, self._title_links_dict_list = self.extractLinks()
         self.cast_crew, self._cast_crew_dict_list = self.extractCastCrew()
 
@@ -292,14 +292,14 @@ class webScrapeEachTitleDetail():
         """
         Return
         ------
-        `dict`, the metda data including (1) link (2) description (3) cast & crew
+        `dict`, the metda data including (1) link (2) overview (3) cast & crew
         """
         return self.meta_data
 
 
     def getDescription(self) -> str:
         """No use"""
-        p = self.html_page_soup_object.find('p', itemprop="description")
+        p = self.html_page_soup_object.find('p', itemprop="overview")
         for x in p:
             return str(x)
         return
@@ -309,9 +309,9 @@ class webScrapeEachTitleDetail():
         """
         Return
         ------
-        `str`, Description
+        `str`, overview
         """
-        return self.description
+        return self.overview
 
 
     def getLink(self) -> list:
@@ -383,7 +383,7 @@ def main():
                     temp_save_path)
 
 
-        # Extract (1) description (2) links (3) cast & crew etc.
+        # Extract (1) overview (2) links (3) cast & crew etc.
         scraper.extractTitleDetail()
         title_detail_dict = scraper.title_detail_dict
         writeToFile(json.dumps(title_detail_dict),
@@ -394,14 +394,14 @@ def main():
 
         movie_id = scraper.rg_id
         movie_title = scraper.title
-        description = scraper.description
+        overview = scraper.overview
         links = scraper.title_links
         cast_crew = scraper.cast_crew
 
         _title_links_dict_list = scraper._title_links_dict_list
         _cast_crew_dict_list = scraper._cast_crew_dict_list
 
-        writeToFile(description,
+        writeToFile(overview,
                     f"extracted_{title_no_symbol}_{year}_description",
                     file_path=demo_save_path)
         writeToFile(json.dumps(links),
@@ -426,7 +426,7 @@ def main():
 
         print("1) movie_id:", movie_id)
         print("2) movie_title:", movie_title)
-        print("3) description:", description)
+        print("3) overview:", overview)
         print(f"4) links: {type(links)}, {links}")
         print("5) cast_crew[0]:", cast_crew[0])
 

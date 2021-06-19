@@ -148,6 +148,7 @@ class webScrapeTitleList:
         db = setupDatabase(db_name=self.folder_name, db_table_name='movie')
         db_connection = db.getConnection()
         df.insert(0, 'rg_id', '')
+        df.insert(3, 'overview', '')
         df = df.iloc[:, 0:-1] #remove last column 'Available On'; get all rows, 1st col to (last - 1) col
         insertPandasDfToDb(db_connection=db_connection, table_name='movie', df=df)
 
