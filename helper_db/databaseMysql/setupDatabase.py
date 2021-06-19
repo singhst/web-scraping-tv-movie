@@ -40,7 +40,8 @@ class setupDatabase():
     """
 
     def __init__(self, 
-                 db_name: str) -> None:
+                 db_name: str,
+                 db_table_name: str) -> None:
 
         self.db_config = ''
 
@@ -50,6 +51,7 @@ class setupDatabase():
         self.password = ''
         self.port = ''
 
+        self.db_table_name = db_table_name
         self.db_connection = ''
         self.db_cursor = ''
 
@@ -57,11 +59,12 @@ class setupDatabase():
         self.connectServer()
         self.checkCreateDatabase()
         self.connectDatabase()
+        self.checkCreateTable()
 
 
     def importDbConfig(self):
 
-        print(f'> Reading MySQL .env config file... ', end='')
+        print(f'mysql> Reading MySQL .env config file... ', end='')
 
         try:
             self.db_config = readConfig()
@@ -86,7 +89,7 @@ class setupDatabase():
 
         Connection to a MySQL Server
         """
-        print(f'> Connecting to MySQL server... ', end='')
+        print(f'mysql> Connecting to MySQL server... ', end='')
         try:
             self.db_connection = mysql.connector.connect(
                 host = self.host,
@@ -107,13 +110,13 @@ class setupDatabase():
             print(f'\t> Error = `{error}`')
 
 
-    def checkCreateDatabase(self) -> bool:
+    def checkCreateDatabase(self):
         """
 
         CREATE DATABASE IF NOT EXISTS DBName;
 
         """
-        print(f'> Created database `{self.database}`... ', end='')
+        print(f'mysql> Created database `{self.database}`... ', end='')
 
         # executing cursor with execute method and pass SQL query
         sql_query = f"CREATE DATABASE IF NOT EXISTS {self.database};"
@@ -122,8 +125,42 @@ class setupDatabase():
         print(f'==> Done!')
 
 
+    def checkCreateTable(self) -> bool:
+        """
+        """
+        print(f'mysql> Creating table `{self.db_table_name}` in `{self.db_connection.database}` database... ', end='')
+
+        # creating database_cursor to perform SQL operation
+        # db_cursor = self.db_connection.cursor()
+        
+        # sql query
+        #"rg_id": "55a2e378-dfb0-4473-b105-7478bb1dcfc1",
+        sql_query = f'''
+            CREATE TABLE IF NOT EXISTS {self.db_table_name} (
+                id INT NOT NULL AUTO_INCREMENT,
+                rg_id VARCHAR(50) NOT NULL, 
+                scraped_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                title VARCHAR(255), 
+                description VARCHAR(512),
+                year INT, 
+                rating VARCHAR(10), 
+                imdb_score VARCHAR(10),     
+                reelgood_rating_score VARCHAR(10),
+                PRIMARY KEY(id, rg_id)
+            );
+        '''
+
+        try:
+            self.db_cursor.execute(sql_query)
+            print('==> Done!')
+
+        except(Exception, mysqlError) as error:
+            print(f'\n\t==> Fail.')
+            print(f'\t> Error = `{error}`')
+
+
     def connectDatabase(self):
-        print(f'> Using database `{self.database}`... ', end='')
+        print(f'mysql> Using database `{self.database}`... ', end='')
         try:
             self.db_connection = mysql.connector.connect(
                 host = self.host,
@@ -189,7 +226,7 @@ class setupDatabase():
         except:
             pass
         
-        print('>>> MySQL cursor & connection were closed\n')
+        print('mysql>>> MySQL cursor & connection were closed\n')
 
 
 

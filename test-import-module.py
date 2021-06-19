@@ -1,6 +1,5 @@
 from helper.translateToUrlPath import translateToUrlPath
 from helper_db.databaseMysql.setupDatabase import setupDatabase
-from helper_db.databaseMysql.createTable import createTable
 from helper_db.databaseMysql.insert import insertARowToDb, insertNRowsToDb, insertPandasDfToDb
 
 
@@ -10,7 +9,7 @@ def getDataFromCsv():
         '/Users/Sing/Documents/GitHub/web-scraping-tv-movie/reelgood-database/all-movies.csv')
 
     # last_col_index = len(df.columns) - 1
-    df = df.iloc[:, 0:-1] #all rows, 1st col to (last - 1) col
+    df = df.iloc[:, 0:-1] #remove last column 'Available On'; get all rows, 1st col to (last - 1) col
     df = df.head(12)
     df.insert(0, 'rg_id', 'x')
     df = df.applymap(str)  # change all columns dtype to string
@@ -27,10 +26,10 @@ if __name__ == '__main__':
     db_name = movies_or_tv = 'movies'  # 'tv' #
     db_table = 'movie'
 
-    db = setupDatabase(db_name)
+    db = setupDatabase(db_name, db_table)
     db_connection = db.getConnection()
 
-    createTable(db_connection, table_name=db_table)
+    # checkCreateTable(db_connection, table_name=db_table)
 
     ####################################################################################
 
