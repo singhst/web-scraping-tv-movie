@@ -17,6 +17,10 @@ Extract all TV Shows and Movies tables in Reelgood.com.
 
 from helper.getCmlArg import getCmlArg
 from helper.folderHandler import folderCreate
+from helper_db.databaseMysql.setupDatabase import setupDatabase
+from helper_db.databaseMysql.insert import insertPandasDfToDb
+
+
 import os
 import sys
 from datetime import date
@@ -140,6 +144,14 @@ class webScrapeTitleList:
 
         return
 
+    def exportTableDataToMysql(self, df: pd.DataFrame):
+        db = setupDatabase(db_name=self.folder_name, db_table_name='movie')
+        db_connection = db.getConnection()
+        df.insert(0, 'rg_id', '')
+        df = df.iloc[:, 0:-1] #remove last column 'Available On'; get all rows, 1st col to (last - 1) col
+        insertPandasDfToDb(db_connection=db_connection, table_name='movie', df=df)
+
+
     def getAllTables(self):
 
         df = pd.DataFrame()
@@ -177,6 +189,8 @@ class webScrapeTitleList:
 
             self.extracted_table.append(df)
             self.temp_frames.append(df)
+            
+            # self.exportTableDataToMysql(df)
 
             self.offset_value += 50
 
