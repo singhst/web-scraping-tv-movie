@@ -11,7 +11,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def insertARow(db_connection,
+def insertARowToDb(db_connection,
                table_name: str,
                rg_id: str,
                title: str,
@@ -42,7 +42,7 @@ def insertARow(db_connection,
     return added_row_count
 
 
-def insertNRows(db_connection,
+def insertNRowsToDb(db_connection,
                 table_name: str,
                 record: List[tuple],
                 close_connection_afterward: bool = True) -> int:
@@ -70,7 +70,7 @@ def insertNRows(db_connection,
     return added_row_count
 
 
-def insertPandasDf(db_connection,
+def insertPandasDfToDb(db_connection,
                    table_name: str,
                    df: pd.DataFrame,
                    close_connection_afterward: bool = True) -> int:
@@ -93,7 +93,7 @@ def insertPandasDf(db_connection,
 
     record = list(df.to_records(index=False))
 
-    added_row_count = insertNRows(db_connection, table_name, record, close_connection_afterward)
+    added_row_count = insertNRowsToDb(db_connection, table_name, record, close_connection_afterward)
 
     return added_row_count
 

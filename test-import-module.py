@@ -1,7 +1,7 @@
 from helper.translateToUrlPath import translateToUrlPath
 from helper_db.databaseMysql.setupDatabase import setupDatabase
 from helper_db.databaseMysql.createTable import createTable
-from helper_db.databaseMysql.insert import insertARow, insertNRows, insertPandasDf
+from helper_db.databaseMysql.insert import insertARowToDb, insertNRowsToDb, insertPandasDfToDb
 
 
 def getDataFromCsv():
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     print(f'\nbefore test_1(), db.isConnected() = {db.isConnected()}\n')
 
     def test_1():
-        added_row_count = insertARow(db_connection,
+        added_row_count = insertARowToDb(db_connection,
                                      table_name=db_table,
                                      rg_id='4355a2e378-dfb0-4473-b105-7478bb1dcfc1',
                                      title='Se7en',
@@ -47,7 +47,7 @@ if __name__ == '__main__':
                                      reelgood_rating_score='100/100',
                                      close_connection_afterward=False
                                      )
-        print('> insertARow, added_row_count =', added_row_count)
+        print('> insertARowToDb, added_row_count =', added_row_count)
 
     test_1()
 
@@ -58,13 +58,13 @@ if __name__ == '__main__':
     df, record = getDataFromCsv()
 
     def test_2():
-        added_row_count = insertNRows(db_connection,
+        added_row_count = insertNRowsToDb(db_connection,
                                       table_name=db_table,
                                       record=record,
                                       close_connection_afterward=False
                                       )
 
-        print('> insertNRows, added_row_count =', added_row_count)
+        print('> insertNRowsToDb, added_row_count =', added_row_count)
 
     test_2()
 
@@ -75,13 +75,13 @@ if __name__ == '__main__':
     print('> df.head(10) =\n', df.head(10))
 
     def test_3():
-        added_row_count = insertPandasDf(db_connection,
+        added_row_count = insertPandasDfToDb(db_connection,
                                          table_name=db_table,
                                          df=df,
                                          close_connection_afterward=True
                                          )
 
-        print('> insertPandasDf, added_row_count =', added_row_count)
+        print('> insertPandasDfToDb, added_row_count =', added_row_count)
 
     test_3()
 
