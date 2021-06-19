@@ -33,7 +33,7 @@ def insertARowToDb(db_connection,
             `int`: no. of rows added to database
     """
 
-    print(f'> Inserting a record in `{db_connection.database}` database... ', end='')
+    print(f'mysql> Inserting a record into `{table_name}` table in `{db_connection.database}` database... ', end='')
 
     record = [(rg_id, title, year, rating, imdb_score, reelgood_rating_score)]
 
@@ -62,8 +62,8 @@ def insertNRowsToDb(db_connection,
         Returns:
             `int`: no. of rows added to database
     """
-    print(
-        f'> Inserting {len(record)} records in `{db_connection.database}` database... ', end='')
+    print(f'mysql> Inserting {len(record)} record into `{table_name}` table in `{db_connection.database}` database... ', end='')
+
 
     added_row_count = _tryAddRecordToDb(db_connection, table_name, record, close_connection_afterward)
 
@@ -145,7 +145,7 @@ def _tryAddRecordToDb(db_connection,
     added_row_count = curr_row_count - old_row_count
 
     print(f'==> Done!')
-    print(f'> {added_row_count} Record inserted successfully into `{table_name}` table, {old_row_count}th-row to {curr_row_count}th-row')
+    print(f'mysql> {added_row_count} Record inserted successfully into `{table_name}` table, {old_row_count}th-row to {curr_row_count}th-row')
 
     # db_cursor.close()
 
@@ -158,6 +158,6 @@ def _tryAddRecordToDb(db_connection,
         db_cursor.close()
         if db_connection.is_connected():
             db_connection.close()
-            print('>>> MySQL connection is closed\n')
+            print('mysql>>> MySQL connection is closed\n')
 
     return added_row_count
