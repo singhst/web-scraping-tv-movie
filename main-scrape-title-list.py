@@ -133,7 +133,7 @@ class webScrapeTitleList:
         csvname = f'{today}-{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
         path = os.path.join(self.csv_export_path, csvname)
 
-        concat_frames.to_csv(path)
+        concat_frames.to_csv(path, index=False)
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
         print("concat_frames.shape =", concat_frames.shape)
@@ -203,7 +203,7 @@ class webScrapeTitleList:
         today = date.today()
         csvname = f'{today}-all-{self.folder_name}.csv'
         path = os.path.join(self.csv_export_path, csvname)
-        concat_frames.to_csv(path)
+        concat_frames.to_csv(path, index=False)
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
         print("concat_frames.shape =", concat_frames.shape)
