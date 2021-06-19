@@ -15,6 +15,8 @@ Extract all TV Shows and Movies tables in Reelgood.com.
     &filter-year_end=2018&filter-year_start=1998
 """
 
+from helper.getCmlArg import getCmlArg
+from helper.folderHandler import folderCreate
 import os
 import sys
 from datetime import date
@@ -24,10 +26,6 @@ from bs4 import BeautifulSoup
 import selenium
 import pandas as pd
 pd.set_option("display.max_columns", None)
-
-
-from helper.folderHandler import folderCreate
-from helper.getCmlArg import getCmlArg
 
 
 class webScrapeTitleList:
@@ -50,11 +48,12 @@ class webScrapeTitleList:
         self.offset_value = 0
         self.old_offset_value = 0
 
-        self.temp_frames = []       #store df temporarily, it is cleared every (offset_value % 10,000 == 0)
-        self.extracted_table = []   #stored all df into one list, e.g. `[df1, df2, ..., df_n]`
+        # store df temporarily, it is cleared every (offset_value % 10,000 == 0)
+        self.temp_frames = []
+        # stored all df into one list, e.g. `[df1, df2, ..., df_n]`
+        self.extracted_table = []
 
         pass
-
 
     def getTableData(self, url) -> pd.DataFrame:
         """Gets table data from the web. Return the extracted table as `pandas` `dataframe`.
@@ -77,8 +76,7 @@ class webScrapeTitleList:
 
         # add User-Agent to header to pretend as browser visit, more detials can be found in FireBug plugin
         # if we don't add the below, error message occurs. ERROR: urllib.error.HTTPError: HTTP Error 403: Forbidden
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
         req = urllib.request.Request(url=url, headers=headers)
 
         try:
@@ -102,7 +100,6 @@ class webScrapeTitleList:
         except:
             return None
 
-
     def cleanDf(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         The following are the instructions of the cleansing process:
@@ -112,24 +109,26 @@ class webScrapeTitleList:
 
         df.columns.values[5] = 'IMDB Score'
         # df.rename(columns={df.columns[5]: 'IMDB Score'}, inplace=True)
-        
+
         df.columns.values[6] = 'Reelgood Rating Score'
         # df.rename(columns={df.columns[6]: 'Reelgood Rating Score'}, inplace=True)
-        
-        df.drop([''], axis=1, inplace=True) #drop columns with `''` `empty str` column header
-        df.replace("", float("NaN"), inplace=True) #fill `''` `empty str` cell values to nan
-        df.dropna(how='all', axis=1, inplace=True) #drop columns with nan as column value
-        
-        return df
 
+        # drop columns with `''` `empty str` column header
+        df.drop([''], axis=1, inplace=True)
+        # fill `''` `empty str` cell values to nan
+        df.replace("", float("NaN"), inplace=True)
+        # drop columns with nan as column value
+        df.dropna(how='all', axis=1, inplace=True)
+
+        return df
 
     def combineAndExportDataframe(self):
         concat_frames = pd.concat(self.temp_frames)
-        
+
         today = date.today()
         csvname = f'{today}-{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
         path = os.path.join(self.csv_export_path, csvname)
-        
+
         concat_frames.to_csv(path)
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
@@ -141,7 +140,6 @@ class webScrapeTitleList:
 
         return
 
-
     def getAllTables(self):
 
         df = pd.DataFrame()
@@ -150,10 +148,11 @@ class webScrapeTitleList:
 
         while 1:
             print("self.offset_value =", self.offset_value)
-            
+
             offset = f'?offset={self.offset_value}'
             url_with_path_query_string = self.url_with_path + offset
-            df = self.getTableData(url_with_path_query_string)   #scrape a table data of movies/TV shows
+            # scrape a table data of movies/TV shows
+            df = self.getTableData(url_with_path_query_string)
 
             # If all titles of movie/TV show are extracted ==> web returns None
             # then concat the df list and export to .csv
@@ -182,7 +181,6 @@ class webScrapeTitleList:
             self.offset_value += 50
 
         return
-
 
     def exportAllDataframeToCsv(self):
         concat_frames = pd.concat(self.extracted_table)
@@ -214,10 +212,10 @@ def main():
     csv_export_path = folderCreate(path, folder_name)
 
     scrapper = webScrapeTitleList(class_of_table,
-                           csv_export_path=csv_export_path,
-                           folder_name=folder_name,
-                           url_domain=url_domain,
-                           url_path=url_path)
+                                  csv_export_path=csv_export_path,
+                                  folder_name=folder_name,
+                                  url_domain=url_domain,
+                                  url_path=url_path)
     scrapper.getAllTables()
     print(len(scrapper.extracted_table))
     # print("df=",df)
