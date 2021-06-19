@@ -44,7 +44,12 @@ def getCmlArg() -> Iterable[str]:
     # for opt, arg in opts:
     opt = opts[0][0]
     if opt == '-h':
-        print('> in `-h`, `test.py -h OR -t OR -m <trend (optional)>`')
+        print('> in `-h`, `test.py -t OR -m <trend (optional)>`')
+        print()
+        print('\t`-h`: Help\n')
+        print('\t`-t`: Scrape TV shows\n')
+        print('\t`-m`: Scrape movies\n') 
+        print('\t`-t` OR `-m` trend (optional)\n')
         sys.exit()
     elif opt in ("-t", "-tv", "-tvshow", "-tvshows"):
         try:
