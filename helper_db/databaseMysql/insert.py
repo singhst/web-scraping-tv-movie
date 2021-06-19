@@ -12,14 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 def insertARow(db_connection,
-                 table_name: str,
-                 rg_id: str,
-                 title: str,
-                 year: str,
-                 rating: str,
-                 imdb_score: str,
-                 reelgood_rating_score: str) -> int:
-
+               table_name: str,
+               rg_id: str,
+               title: str,
+               year: str,
+               rating: str,
+               imdb_score: str,
+               reelgood_rating_score: str,
+               close_connection_afterward: bool = True) -> int:
     """
     Public function. Add one record to MySQL database. 
 
@@ -27,23 +27,25 @@ def insertARow(db_connection,
             db_connection:  `(class) MySQLConnection`, Connection to a MySQL Server
             table_name:     `str`, the table you want to insert data in
             ...... :        `str`, column titles in database
+            close_connection_afterward:     `bool`, default `True`. Choose to close `cursor` and `mysql connection` after operation.
 
         Returns:
-            int: no. of rows added to database
+            `int`: no. of rows added to database
     """
 
     print(f'> Inserting a record in `{db_connection.database}` database... ', end='')
 
     record = [(rg_id, title, year, rating, imdb_score, reelgood_rating_score)]
 
-    added_row_count = _tryAddRecordToDb(db_connection, table_name, record)
+    added_row_count = _tryAddRecordToDb(db_connection, table_name, record, close_connection_afterward)
 
     return added_row_count
 
 
 def insertNRows(db_connection,
                 table_name: str,
-                record: List[tuple]) -> int:
+                record: List[tuple],
+                close_connection_afterward: bool = True) -> int:
     """
     Public function. Add records to MySQL database. 
 
@@ -54,19 +56,24 @@ def insertNRows(db_connection,
                             e.g. `[(data1, data2, ...), (...), ...]`
 
                             `pd.DataFrame().to_record()` converts df to List[turple]
-        Returns:
-            int: no. of rows added to database
-    """
-    print(f'> Inserting {len(record)} records in `{db_connection.database}` database... ', end='')
 
-    added_row_count = _tryAddRecordToDb(db_connection, table_name, record)
+            close_connection_afterward:     `bool`, default `True`. Choose to close `cursor` and `mysql connection` after operation.
+
+        Returns:
+            `int`: no. of rows added to database
+    """
+    print(
+        f'> Inserting {len(record)} records in `{db_connection.database}` database... ', end='')
+
+    added_row_count = _tryAddRecordToDb(db_connection, table_name, record, close_connection_afterward)
 
     return added_row_count
 
 
 def insertPandasDf(db_connection,
-                table_name: str,
-                df: pd.DataFrame) -> int:
+                   table_name: str,
+                   df: pd.DataFrame,
+                   close_connection_afterward: bool = True) -> int:
     """
     Public function. Add records to MySQL database. 
 
@@ -77,20 +84,24 @@ def insertPandasDf(db_connection,
                             e.g. `[(data1, data2, ...), (...), ...]`
 
                             `pd.DataFrame().to_records(index=False)` converts df to List[turple]
-        Returns:
-            int: no. of rows added to database
-    """
-    
-    record = df.to_records(index=False)
 
-    added_row_count = insertNRows(db_connection, table_name, record)
+            close_connection_afterward:     `bool`, default `True`. Choose to close `cursor` and `mysql connection` after operation.
+
+        Returns:
+            `int`: no. of rows added to database
+    """
+
+    record = list(df.to_records(index=False))
+
+    added_row_count = insertNRows(db_connection, table_name, record, close_connection_afterward)
 
     return added_row_count
 
 
 def _tryAddRecordToDb(db_connection,
                       table_name: str,
-                      record: List[tuple]) -> int:
+                      record: List[tuple],
+                      close_connection_afterward: bool) -> int:
     """
     Private function. Add record(s) to MySQL database. 
 
@@ -99,6 +110,7 @@ def _tryAddRecordToDb(db_connection,
             table_name:     `str`, the table you want to insert data in
             record:         `List[tuple]`, data to save into database
                             e.g. `[(data1, data2, ...), (...), ...]`
+            close_connection_afterward:     `bool`, default `True`. Choose to close `cursor` and `mysql connection` after operation.
 
         Returns:
             int: no. of rows added to database
@@ -135,15 +147,17 @@ def _tryAddRecordToDb(db_connection,
     print(f'==> Done!')
     print(f'> {added_row_count} Record inserted successfully into `{table_name}` table, {old_row_count}th-row to {curr_row_count}th-row')
 
-    db_cursor.close()
+    # db_cursor.close()
 
     # except(Exception, mysqlError) as error:
     #     print(f'\n\t==> Fail.')
     #     print(f'\t> Error = `{error}`')
 
     # finally:
-    if db_connection.is_connected():
-        db_connection.close()
-        print('> MySQL connection is closed')
+    if close_connection_afterward:
+        db_cursor.close()
+        if db_connection.is_connected():
+            db_connection.close()
+            print('>>> MySQL connection is closed\n')
 
     return added_row_count

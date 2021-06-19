@@ -2,11 +2,14 @@
 Make connection to MySQL server and gets all config parameters. 
 
 
+######################
+
 Error code handling example,
 => https://dev.mysql.com/doc/connector-python/en/connector-python-api-errors-error.html
 
 MySQL error code,
 => https://dev.mysql.com/doc/mysql-errors/8.0/en/server-error-reference.html
+
 """
 
 
@@ -53,7 +56,7 @@ class setupDatabase():
         self.importDbConfig()
         self.connectServer()
         self.checkCreateDatabase()
-        self.usingDb()
+        self.connectDatabase()
 
 
     def importDbConfig(self):
@@ -119,7 +122,7 @@ class setupDatabase():
         print(f'==> Done!')
 
 
-    def usingDb(self):
+    def connectDatabase(self):
         print(f'> Using database `{self.database}`... ', end='')
         try:
             self.db_connection = mysql.connector.connect(
@@ -169,6 +172,25 @@ class setupDatabase():
         """
     
         return self.database
+
+
+    def isConnected(self) -> bool:    
+        if self.db_connection.is_connected():
+            return True
+        return False
+
+
+    def closeConnection(self):
+        try:
+            self.db_cursor.close()
+
+            if self.db_connection.is_connected():
+                self.db_connection.close()
+        except:
+            pass
+        
+        print('>>> MySQL cursor & connection were closed\n')
+
 
 
 if __name__ == "__main__":
