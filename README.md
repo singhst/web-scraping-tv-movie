@@ -48,10 +48,17 @@ Data format in the web page: HTML table
     <img src="img\reelgood-data-trend-tv-20210528.png" style="zoom:50%;"/>
 
 
+2. `main-scrape-each-title-detail.py`
+
+    [img: Add a gif shows browser keep opening and closing]
+    [img: Show scrapped .json structure: movie, person, etc.]
+    [img: mysql table after saving]
+
+
 ## Missing features
 
-1. Save scrape table data into mysql `main-scrape-title-list.py`
-2. Log the can't-find title of movie/TV show
+1. Save each scraped detail data into mysql, `main-scrape-each-title-detail.py`
+2. Log the can't-find titles of movies/TV shows
 2. not finish `def extractCastCrew(self) -> list:` in `webScrapeEachTitleDetail.py`
 
 
@@ -100,6 +107,9 @@ Data format in the web page: HTML table
 ## Note - When continuously scraping
 
 Must need to open and close the browser to perform continuous scraping.
+
+Reason: 
+Guess, browser cookie related issue.
 
 See [webScrapeEachTitleDetail.py](https://github.com/singhst/web-scraping-tv-movie/blob/master/helper_scraping/webScrapeEachTitleDetail.py)
 
