@@ -10,7 +10,7 @@ def getDataFromCsv():
         '/Users/Sing/Documents/GitHub/web-scraping-tv-movie/reelgood-database/all-movies.csv')
 
     # last_col_index = len(df.columns) - 1
-    df = df.iloc[:, 0:-1] #all rows, 
+    df = df.iloc[:, 0:-1] #all rows, 1st col to (last - 1) col
     df = df.head(12)
     df.insert(0, 'rg_id', 'x')
     df = df.applymap(str)  # change all columns dtype to string
