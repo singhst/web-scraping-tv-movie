@@ -23,6 +23,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 import selenium
 import pandas as pd
+pd.set_option("display.max_columns", None)
+
 
 from helper.folderHandler import folderCreate
 from helper.getCmlArg import getCmlArg
@@ -48,10 +50,11 @@ class webScrapeTitleList:
         self.offset_value = 0
         self.old_offset_value = 0
 
-        self.frames = []
-        self.extracted_table = []
+        self.temp_frames = []       #store df temporarily, it is cleared every (offset_value % 10,000 == 0)
+        self.extracted_table = []   #stored all df into one list, e.g. `[df1, df2, ..., df_n]`
 
         pass
+
 
     def getTableData(self, url) -> pd.DataFrame:
         """Gets table data from the web. Return the extracted table as `pandas` `dataframe`.
@@ -99,21 +102,45 @@ class webScrapeTitleList:
         except:
             return None
 
+
+    def cleanDf(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        The following are the instructions of the cleansing process:
+        1. `6th` column                     ==> `IMDB Score` as column name
+        2. `7th` column                     ==> `Reelgood Rating Score` as column name
+        """
+
+        df.columns.values[5] = 'IMDB Score'
+        # df.rename(columns={df.columns[5]: 'IMDB Score'}, inplace=True)
+        
+        df.columns.values[6] = 'Reelgood Rating Score'
+        # df.rename(columns={df.columns[6]: 'Reelgood Rating Score'}, inplace=True)
+        
+        df.drop([''], axis=1, inplace=True) #drop columns with `''` `empty str` column header
+        df.replace("", float("NaN"), inplace=True) #fill `''` `empty str` cell values to nan
+        df.dropna(how='all', axis=1, inplace=True) #drop columns with nan as column value
+        
+        return df
+
+
     def combineAndExportDataframe(self):
-        concat_frames = pd.concat(self.frames)
+        concat_frames = pd.concat(self.temp_frames)
         
         today = date.today()
         csvname = f'{today}-{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
-        concat_frames.to_csv(self.csv_export_path+'/'+csvname)
+        path = os.path.join(self.csv_export_path, csvname)
+        
+        concat_frames.to_csv(path)
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
         print("concat_frames.shape =", concat_frames.shape)
-        print("> export: ", self.csv_export_path+'\\'+csvname)
+        print("> export: ", path)
 
         self.old_offset_value = self.offset_value
-        self.frames = []
+        self.temp_frames = []
 
         return
+
 
     def getAllTables(self):
 
@@ -122,33 +149,52 @@ class webScrapeTitleList:
         print("self.url_with_path =", self.url_with_path)
 
         while 1:
+            print("self.offset_value =", self.offset_value)
+            
             offset = f'?offset={self.offset_value}'
             url_with_path_query_string = self.url_with_path + offset
             df = self.getTableData(url_with_path_query_string)   #scrape a table data of movies/TV shows
-            self.extracted_table.append(df)
-            self.frames.append(df)
 
-            print("self.offset_value =", self.offset_value)
-            print('df.dtypes =', df.dtypes)
-            # print('df.iloc[[0]] =', df.iloc[[0]])
-
-            # If all titles of movie/TV show are extracted
-            # concat the df list and export to .csv
+            # If all titles of movie/TV show are extracted ==> web returns None
+            # then concat the df list and export to .csv
             if df is None:
                 self.combineAndExportDataframe()
+                self.exportAllDataframeToCsv()
                 print()
-                print(f'end offset={self.offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
+                print(f'> end offset={self.offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
                 print(f'type(self.extracted_table[-1])={type(self.extracted_table[-1])}')
-                print(f'self.extracted_table[-1]={self.extracted_table[-1]}')
+                print(f'self.extracted_table[-1]=\n{self.extracted_table[-1].head(5)}')
                 return
 
+            # save and export title list every 10,000 offset_value,
+            # avoid losing all scraped data if errors occur
             if (self.offset_value % (10000) == 0) and (self.offset_value > 0):
                 # if (self.offset_value % 50) == 0:
                 self.combineAndExportDataframe()
 
+            print('> original df title =', list(df.columns))
+            df = self.cleanDf(df)
+            print('> cleaned df title =', list(df.columns))
+
+            self.extracted_table.append(df)
+            self.temp_frames.append(df)
+
             self.offset_value += 50
 
         return
+
+
+    def exportAllDataframeToCsv(self):
+        concat_frames = pd.concat(self.extracted_table)
+
+        today = date.today()
+        csvname = f'{today}-all-{self.folder_name}.csv'
+        path = os.path.join(self.csv_export_path, csvname)
+        concat_frames.to_csv(path)
+
+        # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
+        print("concat_frames.shape =", concat_frames.shape)
+        print("> export: ", path)
 
 
 def main():
