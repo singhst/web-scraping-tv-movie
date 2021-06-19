@@ -76,7 +76,7 @@ def insertPandasDf(db_connection,
             record:         `List[tuple]`, data to save into database
                             e.g. `[(data1, data2, ...), (...), ...]`
 
-                            `pd.DataFrame().to_records()` converts df to List[turple]
+                            `pd.DataFrame().to_records(index=False)` converts df to List[turple]
         Returns:
             int: no. of rows added to database
     """
