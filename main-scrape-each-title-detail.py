@@ -14,14 +14,26 @@ movie:      /movie
 import os, sys
 import json
 import re
+from typing import Iterable
 
-from helper.translateToUrlPath import translateToUrlPath
-# from helper.getCmlArg import getCmlArg
-# from helper.tempStorage import tempStorage
+# Helper
 from helper.folderHandler import folderCreate
 from helper.writeToFile import writeToFile
-from helper_db.databaseCsv import databaseCsv
 from helper_scraping.webScrapeEachTitleDetail import webScrapeEachTitleDetail
+
+# Database
+from helper_db.databaseCsv import databaseCsv
+from helper_db.databaseMysql.setupDatabase import setupDatabase
+from helper_db.databaseMysql.readTable import readTable
+
+
+def getTitleListCsv() -> Iterable[dict]:
+    # (1) csv version
+    database = databaseCsv('movies', os.path.join(os.getcwd(), 'reelgood-database'))
+    db_table_dict_list = database.getColumnsByColNames()
+    print(str(db_table_dict_list)[:400])
+
+    return db_table_dict_list
 
 
 def main(get_movies_or_tv: str = 'movies'):
@@ -35,10 +47,14 @@ def main(get_movies_or_tv: str = 'movies'):
 
 
     # Get title list and year list from database
-    database = databaseCsv('movies', os.path.join(os.getcwd(), 'reelgood-database'))
-    db_table_dict_list = database.getColumnsByColNames()
-    print(str(db_table_dict_list)[:400])
-    
+    # (1) read from .csv
+    db_table_dict_list = getTitleListCsv()
+
+    # (2) read from MySQL
+    db_table_name = get_movies_or_tv.replace('s', '')   #'movie' instead of 'movies'
+    db = setupDatabase(db_name=get_movies_or_tv, db_table_name=db_table_name)
+    db_connection = db.getConnection()
+
 
     # Scrape detail info of each movie / TV show 
     scraper = webScrapeEachTitleDetail()
