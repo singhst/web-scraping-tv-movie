@@ -191,7 +191,7 @@ class webScrapeTitleList:
             self.extracted_table.append(df)
             self.temp_frames.append(df)
             
-            # self.exportTableDataToMysql(df)
+            self.exportTableDataToMysql(df)
 
             self.offset_value += 50
 
