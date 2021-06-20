@@ -129,6 +129,8 @@ class setupDatabase():
     def checkCreateTable(self):
         """
         CREATE TABLE IF NOT EXISTS 
+
+        import the function `checkCreateTable()` from `checkCreateTable.py` module
         """
         checkCreateTable(db_connection=self.db_connection, db_table_name=self.db_table_name)
 

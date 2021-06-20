@@ -16,15 +16,16 @@ logger = logging.getLogger(__name__)
 
 
 def insertARowToDb(db_connection,
-               table_name: str,
-               rg_id: str,
-               title: str,
-               year: str,
-               overview: str,
-               rating: str,
-               imdb_score: str,
-               reelgood_rating_score: str,
-               close_connection_afterward: bool = True) -> int:
+                   table_name: str = '',
+                   rg_id: str = '',
+                   title: str = '',
+                   year: str = '',
+                   overview: str = '',
+                   rating: str = '',
+                   imdb_score: str = '',
+                   reelgood_rating_score: str = '',
+                   url_offset_value: str = '-1',
+                   close_connection_afterward: bool = True) -> int:
     """
     Public function. Add one record to MySQL database. 
 
@@ -40,7 +41,7 @@ def insertARowToDb(db_connection,
 
     print(f'mysql> Inserting a record into `{table_name}` table in `{db_connection.database}` database... ', end='')
 
-    record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score)]
+    record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score, url_offset_value)]
 
     added_row_count = _tryAddRecordToDb(db_connection, table_name, record, close_connection_afterward)
 
@@ -60,7 +61,7 @@ def insertNRowsToDb(db_connection,
             record:         `List[tuple]`, data to save into database
                             e.g. `[(data1, data2, ...), (...), ...]`
                             
-                            `record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score)]`
+                            `record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score, url_offset_value)]`
 
                             `pd.DataFrame().to_record()` converts df to List[turple]
 
@@ -90,7 +91,7 @@ def insertPandasDfToDb(db_connection,
             record:         `List[tuple]`, data to save into database
                             e.g. `[(data1, data2, ...), (...), ...]`
 
-                            `record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score)]`
+                            `record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score, url_offset_value)]`
 
                             `pd.DataFrame().to_records(index=False)` converts df to List[turple]
 
