@@ -9,10 +9,15 @@ import getopt
 def getCmlArg() -> Iterable[str]:
     """Get the arguments from command line. 
     
-    Return `list(str)`,
+    Return 
+    ---
+    `list(str)`
 
-        format: [<url_path>, <folder_name>]
+    format: `[<url_path>, <folder_name>]
 
+    Example
+    ---
+    return 
         `['curated/trending-picks', 'trending-tv']`
 
         OR `['tv', 'tv']` 

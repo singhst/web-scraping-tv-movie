@@ -1,3 +1,7 @@
+"""
+Insert data into the table
+"""
+
 import datetime
 from re import T
 from mysql.connector import Error as mysqlError
@@ -44,9 +48,9 @@ def insertARowToDb(db_connection,
 
 
 def insertNRowsToDb(db_connection,
-                table_name: str,
-                record: List[tuple],
-                close_connection_afterward: bool = True) -> int:
+                    table_name: str,
+                    record: List[tuple],
+                    close_connection_afterward: bool = True) -> int:
     """
     Public function. Add records to MySQL database. 
 
@@ -74,9 +78,9 @@ def insertNRowsToDb(db_connection,
 
 
 def insertPandasDfToDb(db_connection,
-                   table_name: str,
-                   df: pd.DataFrame,
-                   close_connection_afterward: bool = True) -> int:
+                       table_name: str,
+                       df: pd.DataFrame,
+                       close_connection_afterward: bool = True) -> int:
     """
     Public function. Add records to MySQL database. 
 
