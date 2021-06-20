@@ -1,6 +1,7 @@
 from helper.translateToUrlPath import translateToUrlPath
 from helper_db.databaseMysql.setupDatabase import setupDatabase
 from helper_db.databaseMysql.insert import insertARowToDb, insertNRowsToDb, insertPandasDfToDb
+from helper_db.databaseMysql.readTable import readTableAll
 
 
 def getDataFromCsv():
@@ -22,17 +23,17 @@ def getDataFromCsv():
     return df, record
 
 
-if __name__ == '__main__':
+def test_setupdatabase_and_insert():
 
-    db_name = movies_or_tv = 'movies'  # 'tv' #
-    db_table = 'movie'
+    db_name = movies_or_tv = 'test_movies'  # 'tv' #
+    db_table = 'test_movie'
 
     db = setupDatabase(db_name, db_table)
     db_connection = db.getConnection()
 
     # checkCreateTable(db_connection, table_name=db_table)
 
-    ####################################################################################
+    ################################################################################################
 
     print(f'\nbefore test_1(), db.isConnected() = {db.isConnected()}\n')
 
@@ -54,7 +55,7 @@ if __name__ == '__main__':
 
     print(f'\nafter test_1(), db.isConnected() = {db.isConnected()}\n')
 
-    ####################################################################################
+    ################################################################################################
 
     df, record = getDataFromCsv()
 
@@ -71,7 +72,7 @@ if __name__ == '__main__':
 
     print(f'\nafter test_2(), db.isConnected() = {db.isConnected()}\n')
 
-    ####################################################################################
+    ################################################################################################
 
     print('> df.head(10) =\n', df.head(10))
 
@@ -87,3 +88,9 @@ if __name__ == '__main__':
     test_3()
 
     print(f'\nafter test_3(), db.isConnected() = {db.isConnected()}\n')
+
+
+if __name__ == '__main__':
+
+    test_setupdatabase_and_insert()
+
