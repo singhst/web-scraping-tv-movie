@@ -111,6 +111,7 @@ class webScrapeTitleList:
         The following are the instructions of the cleansing process:
         1. `6th` column                     ==> `IMDB Score` as column name
         2. `7th` column                     ==> `Reelgood Rating Score` as column name
+        3. `last` column                    ==> `url_offset_value` as column name, new
         """
 
         df.columns.values[5] = 'IMDB Score'
@@ -128,6 +129,8 @@ class webScrapeTitleList:
         # Some title name is '', mysql cannot accept `nan` but accept `''` empty string
         # ==> fill `float("NaN")` `nan` cell values to ''
         df.replace(float('NaN'), '', inplace=True)
+
+        df['url_offset_value'] = str(self.url_offset_value)
 
         return df
 
@@ -213,8 +216,8 @@ class webScrapeTitleList:
             
             # self.exportTableDataToMysql(df)   #save 50 titles to mysql database every time
 
-            df['url_offset_value'] = str(self.url_offset_value)
-            print('> add url_offset_value col in df, title =', list(df.columns))
+            # df['url_offset_value'] = str(self.url_offset_value)
+            # print('> add url_offset_value col in df, title =', list(df.columns))
 
             self.extracted_table.append(df)
             self.temp_frames.append(df)
