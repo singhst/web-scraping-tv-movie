@@ -19,6 +19,7 @@ from helper.getCmlArg import getCmlArg
 from helper.folderHandler import folderCreate
 from helper_db.databaseMysql.setupDatabase import setupDatabase
 from helper_db.databaseMysql.insert import insertPandasDfToDb
+from mysql.connector import Error as mysqlError
 
 
 import os
@@ -39,7 +40,8 @@ class webScrapeTitleList:
                  csv_export_path: str,
                  folder_name: str,
                  url_domain: str,
-                 url_path: str) -> None:
+                 url_path: str,
+                 start_offset_value:int=0) -> None:
 
         self.class_of_table = class_of_table
         self.csv_export_path = csv_export_path
@@ -49,8 +51,8 @@ class webScrapeTitleList:
 
         self.url_with_path = f'{url_domain}/{url_path}'
 
-        self.offset_value = 0
-        self.old_offset_value = 0
+        self.offset_value = start_offset_value
+        self.old_offset_value = start_offset_value
 
         # store df temporarily, it is cleared every (offset_value % 10,000 == 0)
         self.temp_frames = []
@@ -120,9 +122,12 @@ class webScrapeTitleList:
         # drop columns with `''` `empty str` column header
         df.drop([''], axis=1, inplace=True)
         # fill `''` `empty str` cell values to nan
-        df.replace("", float("NaN"), inplace=True)
+        df.replace('', float('NaN'), inplace=True)
         # drop columns with nan as column value
         df.dropna(how='all', axis=1, inplace=True)
+        # Some title name is '', mysql cannot accept `nan` but accept `''` empty string
+        # ==> fill `float("NaN")` `nan` cell values to ''
+        df.replace(float('NaN'), '', inplace=True)
 
         return df
 
@@ -145,12 +150,27 @@ class webScrapeTitleList:
         return
 
     def exportTableDataToMysql(self, df: pd.DataFrame):
-        db = setupDatabase(db_name=self.folder_name, db_table_name='movie')
-        db_connection = db.getConnection()
-        df.insert(0, 'rg_id', '')
-        df.insert(3, 'overview', '')
-        df = df.iloc[:, 0:-1] #remove last column 'Available On'; get all rows, 1st col to (last - 1) col
-        insertPandasDfToDb(db_connection=db_connection, table_name='movie', df=df)
+        try:
+            db = setupDatabase(db_name=self.folder_name, db_table_name='movie')
+            db_connection = db.getConnection()
+            df.insert(0, 'rg_id', '')
+            df.insert(3, 'overview', '')
+            #remove last column 'Available On'
+            # df = df.iloc[:, 0:-1] #get all rows, 1st col to (last - 1) col
+            df = df.loc[:, df.columns != 'Available On']
+            insertPandasDfToDb(db_connection=db_connection, table_name='movie', df=df)
+            
+        except(Exception, mysqlError) as error:
+            print(f'\n\t==> Fail.')
+            print(f'\t> Error = `{error}`')
+
+            today = date.today()
+            csvname = f'{today}-{self.folder_name}-mysql-error-offset-{self.offset_value}.csv'
+            path = os.path.join(self.csv_export_path, csvname)
+            df.to_csv(path, index=False)
+
+            print("\tdf.shape =", df.shape)
+            print("\t> export: ", path, '\n\n')
 
 
     def getAllTables(self):
@@ -160,6 +180,7 @@ class webScrapeTitleList:
         print("self.url_with_path =", self.url_with_path)
 
         while 1:
+            print()
             print("self.offset_value =", self.offset_value)
 
             offset = f'?offset={self.offset_value}'
@@ -170,12 +191,13 @@ class webScrapeTitleList:
             # If all titles of movie/TV show are extracted ==> web returns None
             # then concat the df list and export to .csv
             if df is None:
-                self.combineAndExportDataframe()
-                self.exportAllDataframeToCsv()
                 print()
                 print(f'> end offset={self.offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
                 print(f'type(self.extracted_table[-1])={type(self.extracted_table[-1])}')
                 print(f'self.extracted_table[-1]=\n{self.extracted_table[-1].head(5)}')
+                print()
+                self.combineAndExportDataframe()
+                self.exportAllDataframe()
                 return
 
             # save and export title list every 10,000 offset_value,
@@ -184,26 +206,31 @@ class webScrapeTitleList:
                 # if (self.offset_value % 50) == 0:
                 self.combineAndExportDataframe()
 
+            print('> df.shape =', df.shape)
             print('> original df title =', list(df.columns))
             df = self.cleanDf(df)
             print('> cleaned df title =', list(df.columns))
+            
+            # self.exportTableDataToMysql(df)   #save 50 titles to mysql database every time
+
+            df['offset_value'] = str(self.offset_value)
+            print('> add offset_value col in df, title =', list(df.columns))
 
             self.extracted_table.append(df)
             self.temp_frames.append(df)
-            
-            self.exportTableDataToMysql(df)
 
             self.offset_value += 50
 
         return
 
-    def exportAllDataframeToCsv(self):
+    def exportAllDataframe(self):
         concat_frames = pd.concat(self.extracted_table)
 
         today = date.today()
         csvname = f'{today}-all-{self.folder_name}.csv'
         path = os.path.join(self.csv_export_path, csvname)
         concat_frames.to_csv(path, index=False)
+        self.exportTableDataToMysql(concat_frames)   #save all scraped titles to mysql database
 
         # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
         print("concat_frames.shape =", concat_frames.shape)
@@ -230,7 +257,9 @@ def main():
                                   csv_export_path=csv_export_path,
                                   folder_name=folder_name,
                                   url_domain=url_domain,
-                                  url_path=url_path)
+                                  url_path=url_path,
+                                  start_offset_value=int(69950)  #int(70000)
+                                  )
     scrapper.getAllTables()
     print(len(scrapper.extracted_table))
     # print("df=",df)

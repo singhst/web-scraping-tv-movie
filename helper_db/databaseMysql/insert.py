@@ -136,9 +136,10 @@ def _tryAddRecordToDb(db_connection,
             overview,
             rating, 
             imdb_score, 
-            reelgood_rating_score
+            reelgood_rating_score,
+            url_offset_value
             ) 
-        VALUES''' + '(%s, NOW(), %s, %s, %s, %s, %s, %s);'
+        VALUES''' + '(%s, NOW(), %s, %s, %s, %s, %s, %s, %s);'
 
     added_row_count = 0
 

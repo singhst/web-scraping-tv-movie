@@ -146,6 +146,7 @@ class setupDatabase():
                 rating VARCHAR(10), 
                 imdb_score VARCHAR(10),     
                 reelgood_rating_score VARCHAR(10),
+                url_offset_value INT,
                 PRIMARY KEY(id, rg_id)
             );
         '''
