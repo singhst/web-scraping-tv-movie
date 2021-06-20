@@ -51,10 +51,10 @@ class webScrapeTitleList:
 
         self.url_with_path = f'{url_domain}/{url_path}'
 
-        self.offset_value = start_offset_value
+        self.url_offset_value = start_offset_value
         self.old_offset_value = start_offset_value
 
-        # store df temporarily, it is cleared every (offset_value % 10,000 == 0)
+        # store df temporarily, it is cleared every (url_offset_value % 10,000 == 0)
         self.temp_frames = []
         # stored all df into one list, e.g. `[df1, df2, ..., df_n]`
         self.extracted_table = []
@@ -135,16 +135,16 @@ class webScrapeTitleList:
         concat_frames = pd.concat(self.temp_frames)
 
         today = date.today()
-        csvname = f'{today}-{self.folder_name}-offset-{self.old_offset_value}-to-{self.offset_value}.csv'
+        csvname = f'{today}-{self.folder_name}-offset-{self.old_offset_value}-to-{self.url_offset_value}.csv'
         path = os.path.join(self.csv_export_path, csvname)
 
         concat_frames.to_csv(path, index=False)
 
-        # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
+        # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.url_offset_value}')
         print("concat_frames.shape =", concat_frames.shape)
         print("> export: ", path)
 
-        self.old_offset_value = self.offset_value
+        self.old_offset_value = self.url_offset_value
         self.temp_frames = []
 
         return
@@ -165,7 +165,7 @@ class webScrapeTitleList:
             print(f'\t> Error = `{error}`')
 
             today = date.today()
-            csvname = f'{today}-{self.folder_name}-mysql-error-offset-{self.offset_value}.csv'
+            csvname = f'{today}-{self.folder_name}-mysql-error-offset-{self.url_offset_value}.csv'
             path = os.path.join(self.csv_export_path, csvname)
             df.to_csv(path, index=False)
 
@@ -181,9 +181,9 @@ class webScrapeTitleList:
 
         while 1:
             print()
-            print("self.offset_value =", self.offset_value)
+            print("self.url_offset_value =", self.url_offset_value)
 
-            offset = f'?offset={self.offset_value}'
+            offset = f'?offset={self.url_offset_value}'
             url_with_path_query_string = self.url_with_path + offset
             # scrape a table data of movies/TV shows
             df = self.getTableData(url_with_path_query_string)
@@ -192,7 +192,7 @@ class webScrapeTitleList:
             # then concat the df list and export to .csv
             if df is None:
                 print()
-                print(f'> end offset={self.offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
+                print(f'> end offset={self.url_offset_value}, len(self.extracted_table)={len(self.extracted_table)}')
                 print(f'type(self.extracted_table[-1])={type(self.extracted_table[-1])}')
                 print(f'self.extracted_table[-1]=\n{self.extracted_table[-1].head(5)}')
                 print()
@@ -200,10 +200,10 @@ class webScrapeTitleList:
                 self.exportAllDataframe()
                 return
 
-            # save and export title list every 10,000 offset_value,
+            # save and export title list every 10,000 url_offset_value,
             # avoid losing all scraped data if errors occur
-            if (self.offset_value % (10000) == 0) and (self.offset_value > 0):
-                # if (self.offset_value % 50) == 0:
+            if (self.url_offset_value % (10000) == 0) and (self.url_offset_value > 0):
+                # if (self.url_offset_value % 50) == 0:
                 self.combineAndExportDataframe()
 
             print('> df.shape =', df.shape)
@@ -213,13 +213,13 @@ class webScrapeTitleList:
             
             # self.exportTableDataToMysql(df)   #save 50 titles to mysql database every time
 
-            df['offset_value'] = str(self.offset_value)
-            print('> add offset_value col in df, title =', list(df.columns))
+            df['url_offset_value'] = str(self.url_offset_value)
+            print('> add url_offset_value col in df, title =', list(df.columns))
 
             self.extracted_table.append(df)
             self.temp_frames.append(df)
 
-            self.offset_value += 50
+            self.url_offset_value += 50
 
         return
 
@@ -232,7 +232,7 @@ class webScrapeTitleList:
         concat_frames.to_csv(path, index=False)
         self.exportTableDataToMysql(concat_frames)   #save all scraped titles to mysql database
 
-        # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.offset_value}')
+        # print(f'self.old_offset_value={self.old_offset_value}, self.offset={self.url_offset_value}')
         print("concat_frames.shape =", concat_frames.shape)
         print("> export: ", path)
 
@@ -258,7 +258,7 @@ def main():
                                   folder_name=folder_name,
                                   url_domain=url_domain,
                                   url_path=url_path,
-                                  start_offset_value=int(69950)  #int(70000)
+                                  start_offset_value=0  #int(70000)
                                   )
     scrapper.getAllTables()
     print(len(scrapper.extracted_table))
