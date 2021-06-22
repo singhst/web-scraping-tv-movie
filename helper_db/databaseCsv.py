@@ -44,7 +44,7 @@ class databaseCsv():
 
         Remark
         ------
-        `json.dumps(the_return_dict)` make return dict become JSON string.
+        `json.dumps(the_return_dict_list)` make return dict become JSON string.
         """
 
         list_of_dict_in_json_format = self.dataframe[col_name].to_dict(orient=return_type)        
