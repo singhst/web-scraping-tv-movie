@@ -132,6 +132,10 @@ class webScrapeTitleList:
 
         df['url_offset_value'] = str(self.url_offset_value)
 
+        # rename Pandas columns to lower case
+        df.columns = df.columns.str.lower()
+        # df = df.rename(columns=str.lower)
+
         return df
 
     def combineAndExportDataframe(self):
