@@ -22,9 +22,9 @@ class databaseCsv():
     def getDataFrame(self) -> pd.DataFrame:
         return self.dataframe
 
-    def getColumnsByColNames(self, 
-                            col_name: Iterable[str] = ['Title', 'Year'],
-                            return_type: str = 'records') -> Iterable[dict]:
+    def getColumnsByColNames(self,
+                             col_name: Iterable[str] = ['title', 'year'],
+                             return_type: str = 'records') -> Iterable[dict]:
         """
         col_name: `Iterable[str]`; 'Title', 'Year', 'Type', 'Rating', 'IMDB Score', 'Reelgood Rating Score', 'Available On'
         

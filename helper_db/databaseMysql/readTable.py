@@ -55,7 +55,7 @@ def readTableAll(db_connection,
     print(f'mysql> Reading records from `{table_name}` table in `{db_connection.database}` database... ', end='')
 
     # creating a db_cursor to perform a sql operation
-    # returns dict if `dictionary is True` ==> https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlconnection-cursor.html
+    # returns dict list if `dictionary is True` ==> https://dev.mysql.com/doc/connector-python/en/connector-python-api-mysqlconnection-cursor.html
     db_cursor = db_connection.cursor(dictionary=True)
 
     # sql query

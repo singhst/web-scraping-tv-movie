@@ -226,18 +226,18 @@ class webScrapeEachTitleDetail():
 
 
     def extractTitleDetail(self):
+        """Extract the below items from the scraped JSON.
+        - self.title_detail_dict = {}
+        - self.rg_id = ''
+        - self.title = ''
+        - self.overview = ''
+        - self.title_links = Iterable[str]
+        - self.cast_crew = Iterable[str]
         """
-        self.title_detail_dict = {}
-        self.rg_id = ''
-        self.title = ''
-        self.overview = ''
-        self.title_links = Iterable[str]
-        self.cast_crew = Iterable[str]
-        """
-        #First item in dict is the info about the movie/tv show 
+        # First item in dict is the info about the movie/tv show 
         _a_dict = self.meta_data.values()
         _a_dict = iter(_a_dict)
-        self.title_detail_dict = next(_a_dict)
+        self.title_detail_dict = next(_a_dict)  #get first item
 
         # print("\t> self.title_detail_dict =", self.title_detail_dict)
         self.rg_id = self.title_detail_dict['rg_id']
@@ -297,7 +297,7 @@ class webScrapeEachTitleDetail():
         return self.meta_data
 
 
-    def getDescription(self) -> str:
+    def getOverview(self) -> str:
         """No use"""
         p = self.html_page_soup_object.find('p', itemprop="overview")
         for x in p:
@@ -305,7 +305,7 @@ class webScrapeEachTitleDetail():
         return
 
 
-    def getDescriptionFromMetaData(self) -> str:
+    def getOverviewFromMetaData(self) -> str:
         """
         Return
         ------
