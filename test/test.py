@@ -1,3 +1,12 @@
+import math
+
+x = math.ceil(math.log2(999))
+print("x = math.ceil(math.log10(999)/math.log10(2)) =", x)
+print("2**x =", 2**x)
+
+
+print("##########################################")
+
 import pandas as pd
 import json
 df = pd.DataFrame(
