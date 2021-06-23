@@ -14,14 +14,18 @@ def getDataFromCsv():
     # remove last column 'Available On'; get all rows, 1st col to (last - 1) col
     df = df.iloc[:, 0:-1]
     df = df.head(12)
-    df.insert(0, 'rg_id', '')
-    df.insert(3, 'overview', '')
+    df.insert(0, 'rg_id', 'n/a')
+    df.insert(3, 'overview', 'n/a')
+    df = df.loc[:, df.columns != 'available on']    #remove last column 'Available On'
     df = df.applymap(str)  # change all columns dtype to string
-
     url_offset_value = -123
     df['url_offset_value'] = str(url_offset_value)
 
     record = list(df.to_records(index=False))
+
+    print('> list(df.columns) =\n', list(df.columns))
+    print('> df.head(2) =\n', df.head(2))
+    print('> len(record[0]) =', len(record[0]))
 
     return df, record
 
@@ -51,6 +55,7 @@ def test_setupdatabase_and_insert():
                                          rating='18+',
                                          imdb_score='8.6/10',
                                          reelgood_rating_score='100/100',
+                                         url_offset_value = '-1',
                                          close_connection_afterward=False
                                          )
         print('> insertARowToDb, added_row_count =', added_row_count)
@@ -63,7 +68,7 @@ def test_setupdatabase_and_insert():
     print('\n### test_2() #############################################################################################')
 
     df, record = getDataFromCsv()
-
+    print('')
     print('str(record)[:200] =', str(record)[:200])
 
     def test_2():
@@ -110,12 +115,12 @@ def test_readtable_and_update():
     a_dict_list = readTableAll(db_connection=db_connection, table_name=db_table, close_connection_afterward=False)
     print(f'\ntype(a_dict_list) = \n\t{type(a_dict_list)};')
     print(f'type(a_dict_list[0]) = \n\t{type(a_dict_list[0])}')
-    print(f'str(a_dict_list)[:300] = \n\t{str(a_dict_list)[:5000]}\n')
+    print(f'str(a_dict_list)[:300] = \n\t{str(a_dict_list)[:700]}\n')
 
     # test updating row in database
     print('\n### test updating database')
     new_scraped_rg_id = "7644ef5d-e023-4134-974c-88bf0e1149ee"
-    new_scraped_overview = "Two homicide detectives are on a desperate hunt for a serial killer whose crimes are based on the \"seven deadly sins\" in this dark and haunting film that takes viewers from the tortured remains of one victim to the next. The seasoned Det. Sommerset researches each sin in an effort to get inside the killer's mind, while his novice partner, Mills, scoffs at his efforts to unravel the case."
+    new_scraped_overview = "In the tradition of “Ferris Bueller’s Day Off” comes this refreshing comedy about a rebellious prankster with a crafty mind and a heart of gold. Rascal. Joker. Dreamer. Genius... You've never met a college student quite like \"Rancho.\" From the moment he arrives at India's most prestigious university, Rancho's outlandish schemes turn the campus upside down—along with the lives of his two newfound best friends. Together, they make life miserable for \"Virus,\" the school’s uptight and heartless dean. But when Rancho catches the eye of the dean's sexy daughter, Virus sets his sights on flunking out the \"3 idiots\" once and for all."
 
     for a_dict in a_dict_list:
         # print('record =', record)
@@ -124,6 +129,8 @@ def test_readtable_and_update():
         updateRowById(db_connection=db_connection, table_name=db_table, 
                       eid=id, title=title, rg_id=new_scraped_rg_id, overview=new_scraped_overview, 
                       close_connection_afterward=False)
+        
+        print('\n### test updating database with wrong ID')
         id = '000'
         updateRowById(db_connection=db_connection, table_name=db_table, 
                       eid=id, title=title, rg_id=new_scraped_rg_id, overview=new_scraped_overview, 
@@ -134,7 +141,7 @@ def test_readtable_and_update():
 if __name__ == '__main__':
 
     print('\n### test_setupdatabase_and_insert() #############################################################################################')
-    # test_setupdatabase_and_insert()
+    test_setupdatabase_and_insert()
 
     print('\n### test_readtable() #############################################################################################')
     test_readtable_and_update()

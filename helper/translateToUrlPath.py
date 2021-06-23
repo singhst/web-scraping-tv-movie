@@ -25,6 +25,12 @@ def translateToUrlPath(domain: str,
 
     `year`:
         `str`, `2017`
+
+    Return
+    ------
+    `tuple[str, str]`, `(f"{domain}/{movie_or_show}/{url_slug}", url_slug)`
+
+    e.g. ('https://reelgood.com/movie/the-intouchables-2011', 'the-intouchables-2011')
     """
 
     # print('in translateToUrlPath')
@@ -43,7 +49,7 @@ def translateToUrlPath(domain: str,
 
     url_slug = f"{title}-{year}"
 
-    return f"{domain}/{movie_or_show}/{url_slug}"
+    return f"{domain}/{movie_or_show}/{url_slug}", url_slug
 
 
 if __name__ == "__main__":

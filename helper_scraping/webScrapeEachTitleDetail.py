@@ -64,6 +64,7 @@ class webScrapeEachTitleDetail():
         self.url_path_var2 = ''   # /{title of movie or TV show}-{year}, space is replaced by hyphen `-`
         self.url_path_var3 = ''   # /{title of movie or TV show}-{year}
         
+        self.url_slug = ''        # https://reelgood.com/movie/{url_slug}
         self.url = ''
         self.html_page_soup_object = BeautifulSoup.new_tag
         self.meta_data = {}
@@ -98,7 +99,7 @@ class webScrapeEachTitleDetail():
         self.url_path_var2 = title          # /{title of movie or TV show}-{year}, space is replaced by hyphen `-`
         self.url_path_var3 = year           # /{title of movie or TV show}-{year}
         
-        self.url = translateToUrlPath(url_domain, movie_or_show, title, year)
+        self.url, self.url_slug = translateToUrlPath(url_domain, movie_or_show, title, year)
         print("> webScrapeEachTitleDetail, self.url =", self.url)
 
         self.title = title

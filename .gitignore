@@ -49,3 +49,5 @@ helper_db/databaseMysql/__pycache__/setupDatabase.cpython-37.pyc
 helper_db/databaseMysql/__pycache__/checkCreateTable.cpython-37.pyc
 helper_db/databaseMysql/__pycache__/helperFunc.cpython-37.pyc
 helper_db/databaseMysql/__pycache__/insert.cpython-37.pyc
+helper_db/databaseMysql/__pycache__/readTable.cpython-37.pyc
+helper_db/databaseMysql/__pycache__/update.cpython-37.pyc
