@@ -51,9 +51,13 @@ Data format in the web page: HTML table
 2. `main-scrape-each-title-detail.py`
 
     [img: Add a gif shows browser keep opening and closing]
+
     [img: Show scrapped .json structure: movie, person, etc.]
+    
     [img: mysql table after saving]
 
+    A structured data in JSON format can be found in the webpage:
+    <img src="img\reelgood-inspect-html.png" style="zoom:30%;"/>
 
 ## Missing features
 
