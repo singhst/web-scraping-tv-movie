@@ -56,7 +56,7 @@ Data format in the web page: HTML table
     
     [img: mysql table after saving]
 
-    A structured data in JSON format can be found in the webpage:
+    A structured data in JSON format can be found in the webpage. Of course, it is shown after the JavaScript loaded.
     <img src="img\reelgood-inspect-html.png" style="zoom:30%;"/>
 
 ## Missing features
