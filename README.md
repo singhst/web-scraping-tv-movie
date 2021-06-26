@@ -66,7 +66,7 @@ Data format in the web page: HTML table
 
     To scrape the details of each movie/TV show continuously. This programe keeps opening and closing the Chrome browser.
 
-    ![Demo](https://user-images.githubusercontent.com/71545537/123521711-f1a8e080-d6ea-11eb-9894-180d49966f3d.mp4)
+    https://user-images.githubusercontent.com/71545537/123521711-f1a8e080-d6ea-11eb-9894-180d49966f3d.mp4
 
     The scraped JSON file,
 
