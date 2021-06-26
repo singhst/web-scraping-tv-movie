@@ -65,9 +65,8 @@ Data format in the web page: HTML table
 2. `main-scrape-each-title-detail.py`
 
     To scrape the details of each movie/TV show continuously. This programe keeps opening and closing the Chrome browser.
-
-    Uploading 695fb950-fe20-4122-86d8-41363115ce21.mp4…
-
+    
+    
 
     The scraped JSON file,
 
