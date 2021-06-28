@@ -93,11 +93,9 @@ Data format in the web page: HTML table
 
 ## **NEED CHANGE ** Note - Program Structure
 
-`main-scrap-title-list.py`: Main program to extract table data from web page.
+`main-scrap-title-list.py`: Main program to extract movie/TV show title list (table data) from web page.
 
-`main-scrap-link.py`: (Developing) Extract different media service providers (e.g. Netflix, Disney+) (example link: https://reelgood.com/show/friends-1994).
-
-`combine-csv.py`: Combine the separated extractde .csv files into one. 
+`main-scrape-each-title-detail.py`: (Developing) Extract different media service providers (e.g. Netflix, Disney+) (example link: https://reelgood.com/show/friends-1994).
 
 
 ## Note - Routing in the web
