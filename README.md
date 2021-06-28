@@ -55,7 +55,7 @@ Data format in the web page: HTML table
 
         Sample of the scraped data, the first three TV titles match with the table shown in web page:
 
-        <img src="img\csv-allmovies.png" style="zoom:40%;"/>
+        <img src="img\csv-allmovies.png" style="zoom:30%;"/>
 
         Web page:
 
@@ -72,7 +72,7 @@ Data format in the web page: HTML table
 
     Overview:
 
-    <img src="img\scraped-detail-json-person.png" style="zoom:50%;"/>
+    <img src="img\scraped-detail-json-person.png" style="zoom:40%;"/>
         
     Detail:
         
