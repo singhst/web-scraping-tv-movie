@@ -18,7 +18,7 @@ Extract all TV Shows and Movies tables in Reelgood.com.
 from helper.getCmlArg import getCmlArg
 from helper.folderHandler import folderCreate
 from helper_db.databaseMysql.setupDatabase import setupDatabase
-from helper_db.databaseMysql.insert import insertPandasDfToDb
+from helper_db.databaseMysql.insert import insertPandasDfToMovie
 from mysql.connector import Error as mysqlError
 
 
@@ -165,7 +165,7 @@ class webScrapeTitleList:
             #remove last column 'Available On'
             # df = df.iloc[:, 0:-1] #get all rows, 1st col to (last - 1) col
             df = df.loc[:, df.columns != 'Available On']
-            insertPandasDfToDb(db_connection=db_connection, table_name='movie', df=df)
+            insertPandasDfToMovie(db_connection=db_connection, table_name='movie', df=df)
             
         except(Exception, mysqlError) as error:
             print(f'\n\t==> Fail.')

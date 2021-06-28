@@ -24,7 +24,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 # parentdir = os.path.dirname(currentdir)
 sys.path.append(currentdir)
 from readConfig import readConfig
-from checkCreateTable import checkCreateTable
+from checkCreateDataModel import checkCreateDataModel
 
 
 class setupDatabase():
@@ -60,7 +60,7 @@ class setupDatabase():
         self.connectServer()
         self.checkCreateDatabase()
         self.connectDatabase()
-        self.checkCreateTable()
+        self.checkCreateDataModel()
 
 
     def importDbConfig(self):
@@ -126,13 +126,14 @@ class setupDatabase():
         print(f'==> Done!')
 
 
-    def checkCreateTable(self):
+    def checkCreateDataModel(self):
         """
         CREATE TABLE IF NOT EXISTS 
 
-        import the function `checkCreateTable()` from `checkCreateTable.py` module
+        import the function `checkCreateDataModel()` from `checkCreateDataModel.py` module
         """
-        checkCreateTable(db_connection=self.db_connection, db_table_name=self.db_table_name)
+        # checkCreateDataModel(db_connection=self.db_connection, db_table_name=self.db_table_name)
+        checkCreateDataModel(db_connection=self.db_connection)
 
 
     def connectDatabase(self):
