@@ -136,14 +136,16 @@ def movie_test_readtable_and_update():
         # print('record =', record)
         id = a_dict.get('id')
         title = a_dict.get('title')
+        year = a_dict.get('year')
+        print('### ### need change column size')
         updateRowById(db_connection=db_connection, table_name=db_table, 
-                      eid=id, title=title, rg_id=new_scraped_rg_id, overview=new_scraped_overview, 
+                      eid=id, title=title, year=year, rg_id=new_scraped_rg_id, overview=new_scraped_overview, 
                       close_connection_afterward=False)
         
         print('\n### test updating database with wrong ID')
         id = '000'
         updateRowById(db_connection=db_connection, table_name=db_table, 
-                      eid=id, title=title, rg_id=new_scraped_rg_id, overview=new_scraped_overview, 
+                      eid=id, title=title, year=year, rg_id=new_scraped_rg_id, overview=new_scraped_overview, 
                       close_connection_afterward=False)
         break
 
