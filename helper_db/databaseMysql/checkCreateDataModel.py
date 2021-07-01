@@ -45,7 +45,7 @@ def getAvailabilitySqlQuery() -> Iterable[str]:
             rg_id VARCHAR(50) NOT NULL, 
             source_name VARCHAR(50) NOT NULL,
             source_movie_id VARCHAR(50),
-            source_web_link VARCHAR(128),
+            source_web_link VARCHAR(512),
             PRIMARY KEY(link_id)
         );
     '''
