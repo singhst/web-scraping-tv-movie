@@ -192,7 +192,7 @@ def availability_test_setupdatabase_and_insert():
                                           df=df,
                                           close_connection_afterward=False
                                           )
-        print('> insertNRowsToDb, added_row_count =', added_row_count)
+        print('> insertPandasDfToDb, added_row_count =', added_row_count)
 
     test_2()
 

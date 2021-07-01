@@ -49,7 +49,7 @@ class webScrapeEachTitleDetail():
 
         `> overview = scraper.overview`
 
-        `> links = scraper.title_links`
+        `> links = scraper.source_links`
 
         `> cast_crew = scraper.cast_crew`
 
@@ -61,8 +61,8 @@ class webScrapeEachTitleDetail():
         # e.g.  https://reelgood.com/movie/lady-bird-2017
         self.url_domain = ''      # https://reelgood.com
         self.url_path_var1 = ''   # /movie OR /show
-        self.url_path_var2 = ''   # /{title of movie or TV show}-{year}, space is replaced by hyphen `-`
-        self.url_path_var3 = ''   # /{title of movie or TV show}-{year}
+        self.url_path_var2 = ''   # /{title of movie or TV show}-{xxx}, space is replaced by hyphen `-`
+        self.url_path_var3 = ''   # /{xxx}-{year}
         
         self.url_slug = ''        # https://reelgood.com/movie/{url_slug}
         self.url = ''
@@ -72,9 +72,10 @@ class webScrapeEachTitleDetail():
         self.title_detail_dict = {}
         self.rg_id = ''
         self.title = ''
+        self.year = ''
         self.overview = ''
-        self._title_links_dict_list = Iterable[dict]
-        self.title_links = Iterable[str]
+        self.source_links = Iterable[str]
+        self._source_links_dict_list = Iterable[dict]
         self._cast_crew_dict_list = Iterable[dict]
         self.cast_crew = Iterable[str]
 
@@ -96,8 +97,9 @@ class webScrapeEachTitleDetail():
 
         self.url_domain = url_domain        # https://reelgood.com
         self.url_path_var1 = movie_or_show  # /movie OR /show
-        self.url_path_var2 = title          # /{title of movie or TV show}-{year}, space is replaced by hyphen `-`
-        self.url_path_var3 = year           # /{title of movie or TV show}-{year}
+        self.url_path_var2 = title          # /{title of movie or TV show}-{xxx}, space is replaced by hyphen `-`
+        self.url_path_var3 = year           # /{xxx}-{year}
+        self.year = year
         
         self.url, self.url_slug = translateToUrlPath(url_domain, movie_or_show, title, year)
         print("> webScrapeEachTitleDetail, self.url =", self.url)
@@ -232,7 +234,7 @@ class webScrapeEachTitleDetail():
         - self.rg_id = ''
         - self.title = ''
         - self.overview = ''
-        - self.title_links = Iterable[str]
+        - self.source_links = Iterable[str]
         - self.cast_crew = Iterable[str]
         """
         # First item in dict is the info about the movie/tv show 
@@ -244,11 +246,11 @@ class webScrapeEachTitleDetail():
         self.rg_id = self.title_detail_dict['rg_id']
         self.title = self.title_detail_dict['title']
         self.overview = self.title_detail_dict['overview']
-        self.title_links, self._title_links_dict_list = self.extractLinks()
+        self.source_links, self._source_links_dict_list = self.extractLinksInfo()
         self.cast_crew, self._cast_crew_dict_list = self.extractCastCrew()
 
 
-    def extractLinks(self) -> list:
+    def extractLinksInfo(self) -> list:
         """
         Return 
         ------
@@ -257,7 +259,7 @@ class webScrapeEachTitleDetail():
         links_dict_list: `Iterable[dict]`
         """
         links_dict_list = self.title_detail_dict['availability'] #it is a list of dict
-        links = {"links": [link_dict['source_data']['web_link'] for link_dict in links_dict_list]}
+        links = [link_dict['source_data']['web_link'] for link_dict in links_dict_list]
         return links, links_dict_list
 
 
@@ -396,10 +398,10 @@ def main():
         movie_id = scraper.rg_id
         movie_title = scraper.title
         overview = scraper.overview
-        links = scraper.title_links
+        links = scraper.source_links
         cast_crew = scraper.cast_crew
 
-        _title_links_dict_list = scraper._title_links_dict_list
+        _source_links_dict_list = scraper._source_links_dict_list
         _cast_crew_dict_list = scraper._cast_crew_dict_list
 
         writeToFile(overview,
@@ -415,7 +417,7 @@ def main():
                     demo_save_path)
 
 
-        writeToFile(json.dumps(_title_links_dict_list),
+        writeToFile(json.dumps(_source_links_dict_list),
                     f"extracted_{title_no_symbol}_{year}_4_links_dict_list",
                     "json",
                     temp_save_path)

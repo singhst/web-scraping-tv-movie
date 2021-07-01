@@ -128,6 +128,7 @@ def insertPandasDfToDb(db_connection,
 def getSqlQuery(db_table_name: str='movie') -> Iterable[str]:
     """Get the SQL query by table name.
     """
+    query = ''
     if db_table_name == 'movie':
         query = f'''
             INSERT INTO {db_table_name} (
