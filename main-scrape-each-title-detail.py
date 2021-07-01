@@ -26,23 +26,24 @@ from helper_db.databaseCsv import databaseCsv
 from helper_db.databaseMysql.setupDatabase import setupDatabase
 from helper_db.databaseMysql.readTable import readTableAll
 from helper_db.databaseMysql.update import updateRowById
+from helper_db.databaseMysql.insert import insertNRowsToDb
 
 
 def getTitleListCsv() -> Iterable[dict]:
     """"Get movie/tv show title list from .csv"""
-    db = databaseCsv('movies', os.path.join(os.getcwd(), 'reelgood-database'))
-    db_table_dict_list = db.getColumnsByColNames(col_name=['title','year'])
-    print(str(db_table_dict_list)[:400])
+    db_movie = databaseCsv('movies', os.path.join(os.getcwd(), 'reelgood-database'))
+    db_table_movie_row = db_movie.getColumnsByColNames(col_name=['title','year'])
+    print('> str(db_table_movie_row)[:400] =', str(db_table_movie_row)[:400])
 
-    return db_table_dict_list
+    return db_table_movie_row
 
 
 def getTitleListMysql(db_connection, db_table_name) -> Iterable[dict]:
     """"Get movie/tv show title list from mysql server."""
-    db_table_dict_list = readTableAll(db_connection=db_connection, table_name=db_table_name, close_connection_afterward=False)
-    print(str(db_table_dict_list)[:400])
+    db_table_movie_row = readTableAll(db_connection=db_connection, table_name=db_table_name, close_connection_afterward=False)
+    print('> str(db_table_movie_row)[:400] =', str(db_table_movie_row)[:400])
     
-    return db_table_dict_list
+    return db_table_movie_row
 
 
 def main(get_movies_or_tv: str = 'movies'):
@@ -55,15 +56,22 @@ def main(get_movies_or_tv: str = 'movies'):
     save_path = folderCreate(path, 'json')
 
 
-    # Get title list and year list from database
+    # Get title list and year list from `movie` table in `movies` database
     print('\n=== Reading data... =========================================')
     # (1) read from .csv
-    db_table_dict_list = getTitleListCsv()
+    db_table_movie_row = getTitleListCsv()
     # (2) read from MySQL
-    db_table_name = get_movies_or_tv.replace('s', '')   #'movie' instead of 'movies'
-    db = setupDatabase(db_name=get_movies_or_tv, db_table_name=db_table_name)
-    db_connection = db.getConnection()
-    db_table_dict_list = getTitleListMysql(db_connection, db_table_name)
+    table_name_movie = get_movies_or_tv.replace('s', '')   #'movie' instead of 'movies'
+    db_movie = setupDatabase(db_name=get_movies_or_tv, db_table_name=table_name_movie)
+    db_connection_movie = db_movie.getConnection()
+    db_table_movie_row = getTitleListMysql(db_connection_movie, table_name_movie)
+
+
+    # Connect to `availability` table in `movies` database
+    print('\n=== Setting... =========================================')
+    table_name_availability = 'availability'   #'movie' instead of 'movies'
+    db_availability = setupDatabase(db_name=get_movies_or_tv, db_table_name=table_name_availability)
+    db_connection_availability = db_availability.getConnection()
 
 
     print('\n=== Scraping ... =========================================')
@@ -72,9 +80,10 @@ def main(get_movies_or_tv: str = 'movies'):
     url_domain = 'https://reelgood.com'
     movie_or_show = get_movies_or_tv.replace('s', '')
 
-    for i, a_dict in zip(range(1, len(db_table_dict_list)+1), db_table_dict_list):
+    for i, a_dict in zip(range(1, len(db_table_movie_row)+1), db_table_movie_row):
         print()
         print(f'> {i}th {movie_or_show}')
+        # print('\ta_dict =', a_dict)
         title = a_dict.get('title')
         year = a_dict.get('year')
 
@@ -100,18 +109,35 @@ def main(get_movies_or_tv: str = 'movies'):
                         "json", 
                         save_path)
 
-            # Update the row in MySQL server by ID
-            ## Extract info from meta data
+            # Extract info from meta data
             title = scraper.title
+            year = scraper.year
             rg_id = scraper.rg_id
             overview = scraper.overview
+            source_links = scraper.source_links
+            _source_links_dict_list = scraper._source_links_dict_list
+            source_name = ''
+            source_movie_id = ''
+            print(f'> _source_links_dict_list={_source_links_dict_list}')
             print(f'> title={title}')
             print(f'> rg_id={rg_id}')
             print(f'> overview={overview[:10]}')
-            ## upload to mysql
-            updateRowById(db_connection=db_connection, table_name=db_table_name, 
-                          eid=i, title=title, rg_id=rg_id, overview=overview,
+            print(f'> str(source_links)[:100]={str(source_links)[:100]}')
+            
+
+            # Update the row in `movie` table in MySQL server by `id` 
+            updateRowById(db_connection=db_connection_movie, table_name=table_name_movie, 
+                          eid=i, title=title, year=year, rg_id=rg_id, overview=overview,
                           close_connection_afterward=False)
+            ## Insert links to `availability` table
+            print(f'> {len(source_links)} streaming links are inserting to DB...')
+            for link in source_links:
+                record = [(rg_id, source_name, source_movie_id, link)]
+                added_row_count = insertNRowsToDb(db_connection=db_connection_availability,
+                                                  table_name=table_name_availability,
+                                                  record=record,
+                                                  close_connection_afterward=False
+                                                  )
 
 
 if __name__ == "__main__":
