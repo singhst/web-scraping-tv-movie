@@ -30,7 +30,7 @@ def getMovieSqlQuery() -> Iterable[str]:
             imdb_score VARCHAR(10),     
             reelgood_rating_score VARCHAR(10),
             url_offset_value INT,
-            PRIMARY KEY(id, rg_id)
+            PRIMARY KEY(id)
         );
     '''
     return query, db_table_name
@@ -40,13 +40,13 @@ def getAvailabilitySqlQuery() -> Iterable[str]:
     db_table_name = 'availability'
     query = f'''
         CREATE TABLE IF NOT EXISTS {db_table_name} (
-            id INT NOT NULL AUTO_INCREMENT,
+            link_id INT NOT NULL AUTO_INCREMENT,
             scraped_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             rg_id VARCHAR(50) NOT NULL, 
             source_name VARCHAR(50) NOT NULL,
             source_movie_id VARCHAR(50),
             source_web_link VARCHAR(128),
-            PRIMARY KEY(id)
+            PRIMARY KEY(link_id)
         );
     '''
     return query, db_table_name
@@ -61,26 +61,6 @@ def checkCreateTable(db_connection,
 
     # creating database_cursor to perform SQL operation
     db_cursor = db_connection.cursor()
-    
-    """
-    # sql query
-    #"rg_id": "55a2e378-dfb0-4473-b105-7478bb1dcfc1",
-    sql_query = f'''
-        CREATE TABLE IF NOT EXISTS {db_table_name} (
-            id INT NOT NULL AUTO_INCREMENT,
-            scraped_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            rg_id VARCHAR(50) NOT NULL, 
-            title VARCHAR(255), 
-            year INT, 
-            overview VARCHAR(512),
-            rating VARCHAR(10), 
-            imdb_score VARCHAR(10),     
-            reelgood_rating_score VARCHAR(10),
-            url_offset_value INT,
-            PRIMARY KEY(id, rg_id)
-        );
-    '''
-    """
 
     try:
         db_cursor.execute(sql_query)

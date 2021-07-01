@@ -1,8 +1,14 @@
+from datetime import datetime
+
+from bs4 import element
+import pandas as pd
+
 from helper.translateToUrlPath import translateToUrlPath
 from helper_db.databaseMysql.setupDatabase import setupDatabase
-from helper_db.databaseMysql.insert import insertARowToMovie, insertNRowsToMovie, insertPandasDfToMovie
+from helper_db.databaseMysql.insert import insertARowToMovie, insertNRowsToDb, insertPandasDfToDb
 from helper_db.databaseMysql.readTable import readTableAll
 from helper_db.databaseMysql.update import updateRowById
+from helper_db.databaseMysql.helperFunc import add_id_col_to_df
 
 
 def getDataFromCsv():
@@ -14,8 +20,10 @@ def getDataFromCsv():
     # remove last column 'Available On'; get all rows, 1st col to (last - 1) col
     df = df.iloc[:, 0:-1]
     df = df.head(12)
-    df.insert(0, 'rg_id', 'n/a')
+    df.insert(0, 'rg_id', '')
     df.insert(3, 'overview', 'n/a')
+    # df.reset_index(drop=False, inplace=True)
+    # df.rename(columns = {'index': 'id'}, inplace = True)
     df = df.loc[:, df.columns != 'available on']    #remove last column 'Available On'
     df = df.applymap(str)  # change all columns dtype to string
     url_offset_value = -123
@@ -25,12 +33,13 @@ def getDataFromCsv():
 
     print('> list(df.columns) =\n', list(df.columns))
     print('> df.head(2) =\n', df.head(2))
+    print('> record[0] =\n', record[0])
     print('> len(record[0]) =', len(record[0]))
 
     return df, record
 
 
-def test_setupdatabase_and_insert():
+def movie_test_setupdatabase_and_insert():
 
     db_name = movies_or_tv = 'test_movies'  # 'tv' #
     db_table = 'movie'
@@ -41,14 +50,13 @@ def test_setupdatabase_and_insert():
     # checkCreateDataModel(db_connection, table_name=db_table)
 
     ################################################################################################
-    print('\n### test_1() #############################################################################################')
+    print('\n### test_1() ############')
 
     print(f'\nbefore test_1(), db.isConnected() = {db.isConnected()}\n')
-
     def test_1():
         added_row_count = insertARowToMovie(db_connection,
                                          table_name=db_table,
-                                         rg_id='4355a2e378-dfb0-4473-b105-7478bb1dcfc1',
+                                         rg_id=f'4355a2e378-dfb0-{datetime.now()}',
                                          title='Se7en',
                                          year='1995',
                                          overview='',
@@ -65,45 +73,47 @@ def test_setupdatabase_and_insert():
     print(f'\nafter test_1(), db.isConnected() = {db.isConnected()}\n')
 
     ################################################################################################
-    print('\n### test_2() #############################################################################################')
+    print('\n### test_2() ############')
 
     df, record = getDataFromCsv()
     print('')
     print('str(record)[:200] =', str(record)[:200])
 
     def test_2():
-        added_row_count = insertNRowsToMovie(db_connection,
+        added_row_count = insertNRowsToDb(db_connection,
                                           table_name=db_table,
                                           record=record,
                                           close_connection_afterward=False
                                           )
 
-        print('> insertNRowsToMovie, added_row_count =', added_row_count)
+        print('> insertNRowsToDb, added_row_count =', added_row_count)
 
     test_2()
 
     print(f'\nafter test_2(), db.isConnected() = {db.isConnected()}\n')
 
     ################################################################################################
-    print('\n### test_3() #############################################################################################')
+    print('\n### test_3() ############')
 
+    # df = add_id_col_to_df(db.db_cursor, db_table, df)
+    
     print('> df.head(10) =\n', df.head(10))
 
     def test_3():
-        added_row_count = insertPandasDfToMovie(db_connection,
+        added_row_count = insertPandasDfToDb(db_connection,
                                              table_name=db_table,
                                              df=df,
                                              close_connection_afterward=True
                                              )
 
-        print('> insertPandasDfToMovie, added_row_count =', added_row_count)
+        print('> insertPandasDfToDb, added_row_count =', added_row_count)
 
     test_3()
 
     print(f'\nafter test_3(), db.isConnected() = {db.isConnected()}\n')
 
 
-def test_readtable_and_update():
+def movie_test_readtable_and_update():
     db_name = movies_or_tv = 'test_movies'  # 'tv' #
     db_table = 'movie'
 
@@ -138,10 +148,83 @@ def test_readtable_and_update():
         break
 
 
+def availability_test_setupdatabase_and_insert():
+    db_name = movies_or_tv = 'test_movies'  # 'tv' #
+    db_table = 'availability'
+
+    db = setupDatabase(db_name, db_table)
+    db_connection = db.getConnection()
+
+    ################################################################################################
+    print('\n### test_1() ############')
+
+    print(f'\nbefore test_1(), db.isConnected() = {db.isConnected()}\n')
+    rg_id = '-123123'
+    source_name = 'netflix-123213132'
+    source_movie_id = 'xxxxxx'
+    source_web_link = 'www.xxx.com/asdsa/asd'
+    record = [(rg_id, source_name, source_movie_id, source_web_link)]
+    
+    def test_1():
+        added_row_count = insertNRowsToDb(db_connection,
+                                          table_name=db_table,
+                                          record=record,
+                                          close_connection_afterward=False
+                                          )
+
+        print('> insertNRowsToDb, added_row_count =', added_row_count)
+
+    test_1()
+
+    print(f'\nafter test_1(), db.isConnected() = {db.isConnected()}\n')
+
+    ################################################################################################
+    print('\n### test_2() ############')
+
+    print(f'\nbefore test_2(), db.isConnected() = {db.isConnected()}\n')
+
+    df = pd.DataFrame(record, columns =['asda-asdasd-sadas', 'nnn', '9882828', 'www.com'])
+    def test_2():
+        added_row_count = insertPandasDfToDb(db_connection,
+                                          table_name=db_table,
+                                          df=df,
+                                          close_connection_afterward=False
+                                          )
+        print('> insertNRowsToDb, added_row_count =', added_row_count)
+
+    test_2()
+
+    print(f'\nafter test_2(), db.isConnected() = {db.isConnected()}\n')
+
+
+def availability_test_readtable_and_update():
+    db_name = movies_or_tv = 'test_movies'  # 'tv' #
+    db_table = 'availability'
+
+    db = setupDatabase(db_name, db_table)
+    db_connection = db.getConnection()
+
+    # test querying database
+    print('\n### test querying database')
+    a_dict_list = readTableAll(db_connection=db_connection, table_name=db_table, close_connection_afterward=False)
+    print(f'\ntype(a_dict_list) = \n\t{type(a_dict_list)};')
+    print(f'type(a_dict_list[0]) = \n\t{type(a_dict_list[0])}')
+    print(f'str(a_dict_list)[:300] = \n\t{str(a_dict_list)[:700]}\n')
+
+
 if __name__ == '__main__':
 
-    print('\n### test_setupdatabase_and_insert() #############################################################################################')
-    test_setupdatabase_and_insert()
+    print('\n@@@ `movie` table, movie_test_setupdatabase_and_insert() @@@@@@@@@@@@@@@@@@@@@@@@@@')
+    movie_test_setupdatabase_and_insert()
 
-    print('\n### test_readtable() #############################################################################################')
-    test_readtable_and_update()
+    print('\n@@@ `movie` table, movie_test_readtable_and_update() @@@@@@@@@@@@@@@@@@@@@@@@@@')
+    movie_test_readtable_and_update()
+
+
+    #########################################################################################################
+
+    print('\n@@@ `availability` table, availability_test_setupdatabase_and_insert() @@@@@@@@@@@@@@@@@@@@@@@@@@')
+    availability_test_setupdatabase_and_insert()
+
+    print('\n@@@ `availability` table, availability_test_readtable_and_update() @@@@@@@@@@@@@@@@@@@@@@@@@@')
+    availability_test_readtable_and_update()

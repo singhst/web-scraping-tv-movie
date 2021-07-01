@@ -41,9 +41,10 @@ def insertARowToMovie(db_connection,
 
     print(f'mysql> Inserting a record into `{table_name}` table in `{db_connection.database}` database... ', end='')
 
+    db_cursor = db_connection.cursor()
     record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score, url_offset_value)]
 
-    sql_query, table_name = getMovieSqlQuery()
+    sql_query, table_name = getSqlQuery(db_table_name=table_name)
     added_row_count = _tryAddRecordToDb(db_connection, 
                                         table_name=table_name, 
                                         sql_query=sql_query, 
@@ -52,18 +53,19 @@ def insertARowToMovie(db_connection,
     return added_row_count
 
 
-def insertNRowsToMovie(db_connection,
-                       table_name: str,
-                       record: List[tuple],
-                       close_connection_afterward: bool = True) -> int:
+def insertNRowsToDb(db_connection,
+                    table_name: str,
+                    record: List[tuple],
+                    close_connection_afterward: bool = True) -> int:
     """
     Public function. Add records to MySQL database. 
 
         Args:
             db_connection:  `(class) MySQLConnection`, Connection to a MySQL Server
-            table_name:     `str`, the table you want to insert data in
+            table_name:     `str`, the table you want to insert data in. 
+                            E.g. `movie` or `availability` table
             record:         `List[tuple]`, data to save into database
-                            e.g. `[(data1, data2, ...), (...), ...]`
+                            E.g. `[(data1, data2, ...), (...), ...]`
                             
                             `record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score, url_offset_value)]`
 
@@ -78,7 +80,7 @@ def insertNRowsToMovie(db_connection,
 
 
     # added_row_count = _tryAddRecordToDb(db_connection, table_name, record, close_connection_afterward)
-    sql_query, table_name = getMovieSqlQuery()
+    sql_query, table_name = getSqlQuery(db_table_name=table_name)
     added_row_count = _tryAddRecordToDb(db_connection, 
                                         table_name=table_name, 
                                         sql_query=sql_query, 
@@ -87,7 +89,7 @@ def insertNRowsToMovie(db_connection,
     return added_row_count
 
 
-def insertPandasDfToMovie(db_connection,
+def insertPandasDfToDb(db_connection,
                           table_name: str,
                           df: pd.DataFrame,
                           close_connection_afterward: bool = True) -> int:
@@ -109,11 +111,13 @@ def insertPandasDfToMovie(db_connection,
         Returns:
             `int`: no. of rows added to database
     """
+    print(f'mysql> Inserting {len(df)} record into `{table_name}` table in `{db_connection.database}` database... ', end='')
 
     record = list(df.to_records(index=False))
 
-    # added_row_count = insertNRowsToMovie(db_connection, table_name, record, close_connection_afterward)
-    sql_query, table_name = getMovieSqlQuery()
+    # added_row_count = insertNRowsToDb(db_connection, table_name, record, close_connection_afterward)
+    
+    sql_query, table_name = getSqlQuery(db_table_name=table_name)
     added_row_count = _tryAddRecordToDb(db_connection, 
                                         table_name=table_name, 
                                         sql_query=sql_query, 
@@ -122,21 +126,33 @@ def insertPandasDfToMovie(db_connection,
     return added_row_count
 
 
-def getMovieSqlQuery() -> Iterable[str]:
-    db_table_name = 'movie'
-    query = f'''
-        INSERT INTO {db_table_name} (
-            rg_id,
-            scraped_timestamp,
-            title, 
-            year, 
-            overview,
-            rating, 
-            imdb_score, 
-            reelgood_rating_score,
-            url_offset_value
+def getSqlQuery(db_table_name: str='movie') -> Iterable[str]:
+    """Get the SQL query by table name.
+    """
+    if db_table_name == 'movie':
+        query = f'''
+            INSERT INTO {db_table_name} (
+                rg_id,
+                scraped_timestamp,
+                title, 
+                year, 
+                overview,
+                rating, 
+                imdb_score, 
+                reelgood_rating_score,
+                url_offset_value
             ) 
-        VALUES''' + '(%s, NOW(), %s, %s, %s, %s, %s, %s, %s);'
+            VALUES''' + '(%s, NOW(), %s, %s, %s, %s, %s, %s, %s);'
+    elif db_table_name == 'availability':
+        query = f'''
+            INSERT INTO {db_table_name} (
+                scraped_timestamp,
+                rg_id, 
+                source_name,
+                source_movie_id,
+                source_web_link
+            )
+            VALUES''' + '(NOW(), %s, %s, %s, %s);'
     return query, db_table_name
 
 
