@@ -41,7 +41,6 @@ def insertARowToMovie(db_connection,
 
     print(f'mysql> Inserting a record into `{table_name}` table in `{db_connection.database}` database... ', end='')
 
-    db_cursor = db_connection.cursor()
     record = [(rg_id, title, year, overview, rating, imdb_score, reelgood_rating_score, url_offset_value)]
 
     sql_query, table_name = getSqlQuery(db_table_name=table_name)
