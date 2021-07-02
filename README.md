@@ -164,10 +164,19 @@ def scrapeHtmlPageSelenium(self) -> bool:
 
 ## Note - Reference Database ERD
 
+Follows `1NF` (First Normal Form) normalization rules:
+- Each table cell should contain a single value.
+- Each record needs to be unique.
+
+Because one or more than one streaming platforms provide the same movie/TV show, the scrapped links for a movie/TV show can be more than one (e.g. `Netflix`, `Disney+`, `HBO` and `Amazon Prime` etc.). Follows `1NF` rule, storing links into one `movie` table cannot fulfill `1NF` rules. 
+
+So, partition `movie` table into 2 tables:
+1. `availability` table to store streaming links
+2. `movie` table
+
+`<img src="img\db-movies-erd.png" style="zoom:50%;"/>`
+
 Credit to: [link](https://www.databasestar.com/sample-database-movies/)
-
-    <img src="img\db-movies-erd.png" style="zoom:50%;"/>
-
 
 https://examples.javacodegeeks.com/crud-operations-in-python-on-mysql/
 
