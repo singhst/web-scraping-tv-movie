@@ -1,8 +1,8 @@
 # web-scraping-tv-movie
 
-A program to scrap TV Shows and Movies from [web page](https://reelgood.com/). Stores the scraped data in .csv format.
+A program to scrap TV Shows and Movies from [web page](https://reelgood.com/). Stores the scraped data in MySQL server and a backup in .csv format.
 
-Data format in the web page: HTML table 
+Data format in the web page: HTML table, JSON
 
 
 ## Usage
