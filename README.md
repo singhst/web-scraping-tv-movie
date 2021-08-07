@@ -162,7 +162,7 @@ def scrapeHtmlPageSelenium(self) -> bool:
 ```
 
 
-## Note - Reference Database ERD
+## Note - Reference Database ER Diagram
 
 Follows `1NF` (First Normal Form) normalization rules:
 - Each table cell should contain a single value.
