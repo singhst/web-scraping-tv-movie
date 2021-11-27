@@ -196,39 +196,76 @@ Download `chromedriver` (Linux) under `/usr/local/bin`
 
 Set up python environment when it is a new env,
 
-1. Create new VirtualEnv:
+1. Check whether `virtualenv` is installed:
 
-    ```sh
-    $ virtualenv venv
+    ```shell
+    $ python3 -m pip show virtualenv
+    
+    Name: virtualenv
+    Version: 20.9.0
+    Summary: Virtual Python Environment builder
+    Home-page: https://virtualenv.pypa.io/
+    Author: Bernat Gabor
+    Author-email: gaborjbernat@gmail.com
+    License: MIT
+    Location: /Users/Sing/Library/Python/3.8/lib/python/site-packages
+    Requires: six, backports.entry-points-selectable, platformdirs, distlib, filelock
+    Required-by: 
     ```
 
-2. Activate the VirtualEnv 
+    Install if don't have:
+
+    ```shell
+    $ python3 -m pip install virtualenv
+    ```
+
+
+2. Create new VirtualEnv:
+
+    cd to your preferred file path:
+    ```shell
+    $ cd ...
+    ```
+
+    ```shell
+    $ python3 -m venv venv
+    ```
+
+    Use `ls` to check:
+    ```shell
+    $ ls
+
+    ... venv ...
+    ```
+
+
+3. Activate the VirtualEnv 
 
     Linux:
 
-    ```sh
+    ```shell
     $ source venv/bin/activate
     ```	
     OR	
-    ```sh
+    ```shell
     $ . venv/bin/activate
     ```
 	
     Windows
-    ```sh
+    ```shell
     $ venv\Scripts\activate.bat
     ```
 
 
-3. pip install requirements.txt:
+4. pip install requirements.txt:
 
-    ```sh
-    $ pip install -r requirements.txt
+    ```shell
+    (venv) $ pip install -r requirements.txt
     ```
 
 
-4. Export venv pip requirements.txt:
+5. Export venv pip requirements.txt:
 
-    ```sh
-    $ pip freeze > requirements.txt
+    ```shell
+    (venv) $ pip freeze > requirements.txt
     ```
